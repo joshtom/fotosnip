@@ -119,7 +119,6 @@ button:disabled {
   text-transform: uppercase;
 }
 
-.code-input,
 input,
 select {
   background: #f8fafc;
@@ -129,26 +128,22 @@ select {
   outline: none;
 }
 
-.code-input:focus,
 input:focus,
 select:focus {
   border-color: #0f766e;
   box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
 }
 
-.code-input {
-  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 13px;
-  line-height: 1.5;
-  min-height: 180px;
-  padding: 12px;
-  resize: vertical;
-}
-
 input,
 select {
   min-height: 38px;
   padding: 0 10px;
+}
+
+.code-editor {
+  border: 1px solid #223047;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 input[type='range'] {

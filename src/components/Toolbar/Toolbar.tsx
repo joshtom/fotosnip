@@ -14,9 +14,9 @@ import {
   type ShadowSize,
   useEditorStore,
 } from '../../store/editorStore'
+import { CodeEditor } from '../Editor/CodeEditor'
 
 export function Toolbar() {
-  const code = useEditorStore((state) => state.code)
   const language = useEditorStore((state) => state.language)
   const frameStyle = useEditorStore((state) => state.frameStyle)
   const windowTitle = useEditorStore((state) => state.windowTitle)
@@ -34,7 +34,6 @@ export function Toolbar() {
   const annotationsEnabled = useEditorStore(
     (state) => state.annotationsEnabled,
   )
-  const setCode = useEditorStore((state) => state.setCode)
   const setLanguage = useEditorStore((state) => state.setLanguage)
   const setFrameStyle = useEditorStore((state) => state.setFrameStyle)
   const setWindowTitle = useEditorStore((state) => state.setWindowTitle)
@@ -58,16 +57,8 @@ export function Toolbar() {
   return (
     <aside className="toolbar" aria-label="Screenshot controls">
       <section className="control-section">
-        <label className="control-label" htmlFor="code-input">
-          Code
-        </label>
-        <textarea
-          className="code-input"
-          id="code-input"
-          value={code}
-          onChange={(event) => setCode(event.target.value)}
-          spellCheck={false}
-        />
+        <span className="control-label">Code</span>
+        <CodeEditor />
       </section>
 
       <section className="control-section">
