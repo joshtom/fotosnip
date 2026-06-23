@@ -1,4 +1,11 @@
+import { useEffect, useState } from 'react'
+
 import { WindowFrame } from './WindowFrame'
+import {
+  type HighlightToken,
+  type HighlightedCode,
+  highlightCodeToLines,
+} from '../../lib/shiki'
 import { useEditorStore } from '../../store/editorStore'
 
 const paddingMap = {
@@ -28,6 +35,8 @@ const canvasMap = {
 
 export function SnippetCanvas() {
   const code = useEditorStore((state) => state.code)
+  const language = useEditorStore((state) => state.language)
+  const theme = useEditorStore((state) => state.theme)
   const fontFamily = useEditorStore((state) => state.fontFamily)
   const fontSize = useEditorStore((state) => state.fontSize)
   const lineHeight = useEditorStore((state) => state.lineHeight)
@@ -44,6 +53,25 @@ export function SnippetCanvas() {
   const toggleLineHighlight = useEditorStore(
     (state) => state.toggleLineHighlight,
   )
+  const [highlightedCode, setHighlightedCode] = useState<HighlightedCode>({
+    background: '#101827',
+    foreground: '#dbeafe',
+    lines: [],
+  })
+
+  useEffect(() => {
+    let isActive = true
+
+    highlightCodeToLines(code, language, theme).then((nextHighlight) => {
+      if (isActive) {
+        setHighlightedCode(nextHighlight)
+      }
+    })
+
+    return () => {
+      isActive = false
+    }
+  }, [code, language, theme])
 
   const lines = code.length > 0 ? code.split('\n') : ['']
   const hasHighlights = highlightedLines.length > 0
@@ -68,8 +96,10 @@ export function SnippetCanvas() {
           <article
             className="snippet-card"
             style={{
+              background: highlightedCode.background,
               borderRadius,
               boxShadow: shadowMap[shadow],
+              color: highlightedCode.foreground,
             }}
           >
             <WindowFrame />
@@ -104,7 +134,10 @@ export function SnippetCanvas() {
                       </button>
                     ) : null}
                     <code className={wordWrap ? 'wrap-code' : 'nowrap-code'}>
-                      {line || ' '}
+                      <HighlightedLine
+                        fallback={line}
+                        tokens={highlightedCode.lines[index] ?? []}
+                      />
                     </code>
                   </div>
                 )
@@ -117,5 +150,35 @@ export function SnippetCanvas() {
         </div>
       </div>
     </section>
+  )
+}
+
+function HighlightedLine({
+  fallback,
+  tokens,
+}: {
+  fallback: string
+  tokens: HighlightToken[]
+}) {
+  if (tokens.length === 0) {
+    return <>{fallback || ' '}</>
+  }
+
+  return (
+    <>
+      {tokens.map((token, index) => (
+        <span
+          key={`${index}-${token.content}`}
+          style={{
+            color: token.color,
+            fontStyle: token.fontStyle === 1 ? 'italic' : undefined,
+            fontWeight: token.fontStyle === 2 ? 700 : undefined,
+            textDecoration: token.fontStyle === 4 ? 'underline' : undefined,
+          }}
+        >
+          {token.content}
+        </span>
+      ))}
+    </>
   )
 }
