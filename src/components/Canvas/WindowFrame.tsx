@@ -3,6 +3,7 @@ import { useEditorStore } from '../../store/editorStore'
 export function WindowFrame() {
   const frameStyle = useEditorStore((state) => state.frameStyle)
   const windowTitle = useEditorStore((state) => state.windowTitle)
+  const windowIcon = useEditorStore((state) => state.windowIcon)
   const setWindowTitle = useEditorStore((state) => state.setWindowTitle)
 
   if (frameStyle === 'frameless') {
@@ -10,14 +11,21 @@ export function WindowFrame() {
   }
 
   const titleInput = (fallback: string) => (
-    <input
-      aria-label="Window title"
-      className="window-title-input"
-      placeholder={fallback}
-      type="text"
-      value={windowTitle}
-      onChange={(event) => setWindowTitle(event.target.value)}
-    />
+    <span className="window-title-field">
+      {windowIcon.trim() ? (
+        <span className="window-title-icon" aria-hidden="true">
+          {windowIcon.trim().slice(0, 3)}
+        </span>
+      ) : null}
+      <input
+        aria-label="Window title"
+        className="window-title-input"
+        placeholder={fallback}
+        type="text"
+        value={windowTitle}
+        onChange={(event) => setWindowTitle(event.target.value)}
+      />
+    </span>
   )
 
   switch (frameStyle) {

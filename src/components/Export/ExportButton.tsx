@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { toBlob, toPng } from 'html-to-image'
-import { Copy, Download } from 'lucide-react'
 
 type ExportStatus =
   | 'idle'
@@ -84,7 +83,6 @@ export function ExportButton() {
         disabled={isExporting}
         onClick={downloadPng}
       >
-        <Download aria-hidden="true" size={17} />
         {isExporting ? 'Exporting...' : 'Export PNG'}
       </button>
       <button
@@ -93,7 +91,6 @@ export function ExportButton() {
         disabled={isExporting}
         onClick={copyPng}
       >
-        <Copy aria-hidden="true" size={16} />
         Copy PNG
       </button>
       <span className="export-status" role="status">

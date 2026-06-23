@@ -36,6 +36,7 @@ export type EditorSettings = {
   language: string
   frameStyle: FrameStyle
   windowTitle: string
+  windowIcon: string
   theme: string
   fontFamily: string
   fontSize: number
@@ -69,6 +70,7 @@ type EditorActions = {
   setLanguage: (language: string) => void
   setFrameStyle: (frameStyle: FrameStyle) => void
   setWindowTitle: (windowTitle: string) => void
+  setWindowIcon: (windowIcon: string) => void
   setTheme: (theme: string) => void
   setFontFamily: (fontFamily: string) => void
   setFontSize: (fontSize: number) => void
@@ -165,6 +167,7 @@ const getPresetSettings = (
   lineHeight: state.lineHeight,
   frameStyle: state.frameStyle,
   windowTitle: state.windowTitle,
+  windowIcon: state.windowIcon,
   padding: state.padding,
   borderRadius: state.borderRadius,
   shadow: state.shadow,
@@ -182,6 +185,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   language: 'typescript',
   frameStyle: 'macos',
   windowTitle: 'utils.ts',
+  windowIcon: 'TS',
   theme: 'github-dark',
   fontFamily: 'JetBrains Mono',
   fontSize: 15,
@@ -207,6 +211,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   setLanguage: (language) => set({ language }),
   setFrameStyle: (frameStyle) => set({ frameStyle }),
   setWindowTitle: (windowTitle) => set({ windowTitle }),
+  setWindowIcon: (windowIcon) => set({ windowIcon }),
   setTheme: (theme) => set({ theme }),
   setFontFamily: (fontFamily) => set({ fontFamily }),
   setFontSize: (fontSize) => set({ fontSize }),
