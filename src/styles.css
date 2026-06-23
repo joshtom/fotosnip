@@ -166,8 +166,21 @@ select {
   outline: none;
 }
 
+textarea {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  color: #172033;
+  line-height: 1.4;
+  min-height: 64px;
+  outline: none;
+  padding: 9px 10px;
+  resize: vertical;
+}
+
 input:focus,
-select:focus {
+select:focus,
+textarea:focus {
   border-color: #0f766e;
   box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
 }
@@ -337,6 +350,65 @@ input[type='color'] {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+}
+
+.annotation-panel {
+  border-top: 1px solid #e2e8f0;
+  display: grid;
+  gap: 12px;
+  padding-top: 16px;
+}
+
+.annotation-action {
+  background: #0f766e;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  font-weight: 800;
+  min-height: 38px;
+  padding: 0 12px;
+}
+
+.annotation-action:disabled {
+  opacity: 0.55;
+}
+
+.annotation-list {
+  display: grid;
+  gap: 10px;
+}
+
+.annotation-edit-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+
+.annotation-edit-card span {
+  color: #5a6576;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.annotation-edit-card button {
+  background: transparent;
+  border: 0;
+  color: #be123c;
+  font-size: 13px;
+  font-weight: 800;
+  justify-self: start;
+  padding: 0;
+}
+
+.error-text {
+  color: #be123c;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0;
 }
 
 .canvas-stage {
@@ -617,6 +689,10 @@ input[type='color'] {
   transition: opacity 160ms ease;
 }
 
+.code-line.has-annotation {
+  grid-template-columns: auto minmax(0, 1fr) minmax(180px, 0.8fr);
+}
+
 .code-line.is-dimmed {
   opacity: 0.35;
 }
@@ -645,6 +721,24 @@ input[type='color'] {
 .nowrap-code {
   overflow-x: auto;
   white-space: pre;
+}
+
+.line-annotation {
+  align-items: baseline;
+  color: rgba(203, 213, 225, 0.72);
+  display: inline-flex;
+  font-size: 0.88em;
+  font-style: italic;
+  gap: 8px;
+  min-width: 0;
+  white-space: normal;
+}
+
+.annotation-leader {
+  background: rgba(148, 163, 184, 0.45);
+  display: inline-flex;
+  flex: 0 0 22px;
+  height: 1px;
 }
 
 .watermark {

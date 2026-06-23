@@ -17,6 +17,7 @@ import {
   useEditorStore,
 } from '../../store/editorStore'
 import { CodeEditor } from '../Editor/CodeEditor'
+import { AnnotationPanel } from '../AI/AnnotationPanel'
 import { PresetManager } from './PresetManager'
 
 export function Toolbar() {
@@ -366,6 +367,7 @@ export function Toolbar() {
         </label>
       </section>
 
+      <AnnotationPanel />
       <PresetManager />
     </aside>
   )

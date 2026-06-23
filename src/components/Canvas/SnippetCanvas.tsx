@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import { Annotations } from './Annotations'
 import { WindowFrame } from './WindowFrame'
 import {
   type HighlightToken,
@@ -48,6 +49,10 @@ export function SnippetCanvas() {
   const wordWrap = useEditorStore((state) => state.wordWrap)
   const highlightedLines = useEditorStore((state) => state.highlightedLines)
   const showWatermark = useEditorStore((state) => state.showWatermark)
+  const annotationsEnabled = useEditorStore(
+    (state) => state.annotationsEnabled,
+  )
+  const annotations = useEditorStore((state) => state.annotations)
   const canvasSize = useEditorStore((state) => state.canvasSize)
   const customWidth = useEditorStore((state) => state.customWidth)
   const toggleLineHighlight = useEditorStore(
@@ -116,10 +121,15 @@ export function SnippetCanvas() {
                 const lineNumber = index + 1
                 const isHighlighted = highlightedLines.includes(lineNumber)
                 const isDimmed = hasHighlights && !isHighlighted
+                const hasAnnotation =
+                  annotationsEnabled &&
+                  annotations.some((annotation) => annotation.line === lineNumber)
 
                 return (
                   <div
-                    className={`code-line ${isDimmed ? 'is-dimmed' : ''}`}
+                    className={`code-line ${
+                      hasAnnotation ? 'has-annotation' : ''
+                    } ${isDimmed ? 'is-dimmed' : ''}`}
                     key={`${lineNumber}-${line}`}
                   >
                     {showLineNumbers ? (
@@ -140,6 +150,7 @@ export function SnippetCanvas() {
                         tokens={highlightedCode.lines[index] ?? []}
                       />
                     </code>
+                    <Annotations line={lineNumber} />
                   </div>
                 )
               })}

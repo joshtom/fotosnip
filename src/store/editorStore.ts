@@ -51,6 +51,7 @@ export type EditorSettings = {
   annotationMode: AnnotationMode
   annotations: Annotation[]
   annotationsLoading: boolean
+  annotationsError: string
   canvasSize: CanvasSize
   customWidth: number
   presets: Preset[]
@@ -82,7 +83,10 @@ type EditorActions = {
   setAnnotationsEnabled: (annotationsEnabled: boolean) => void
   setAnnotationMode: (annotationMode: AnnotationMode) => void
   setAnnotations: (annotations: Annotation[]) => void
+  updateAnnotation: (line: number, text: string) => void
+  deleteAnnotation: (line: number) => void
   setAnnotationsLoading: (annotationsLoading: boolean) => void
+  setAnnotationsError: (annotationsError: string) => void
   setCanvasSize: (canvasSize: CanvasSize) => void
   setCustomWidth: (customWidth: number) => void
   savePreset: (name: string) => void
@@ -193,6 +197,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   annotationMode: 'explain',
   annotations: [],
   annotationsLoading: false,
+  annotationsError: '',
   canvasSize: 'auto',
   customWidth: 1200,
   presets: readStoredPresets(),
@@ -221,7 +226,20 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   setAnnotationsEnabled: (annotationsEnabled) => set({ annotationsEnabled }),
   setAnnotationMode: (annotationMode) => set({ annotationMode }),
   setAnnotations: (annotations) => set({ annotations }),
+  updateAnnotation: (line, text) =>
+    set((state) => ({
+      annotations: state.annotations.map((annotation) =>
+        annotation.line === line ? { ...annotation, text } : annotation,
+      ),
+    })),
+  deleteAnnotation: (line) =>
+    set((state) => ({
+      annotations: state.annotations.filter(
+        (annotation) => annotation.line !== line,
+      ),
+    })),
   setAnnotationsLoading: (annotationsLoading) => set({ annotationsLoading }),
+  setAnnotationsError: (annotationsError) => set({ annotationsError }),
   setCanvasSize: (canvasSize) => set({ canvasSize }),
   setCustomWidth: (customWidth) => set({ customWidth }),
   savePreset: (name) =>
