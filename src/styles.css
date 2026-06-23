@@ -1,0 +1,395 @@
+@import 'tailwindcss';
+
+:root {
+  color: #111827;
+  background: #f5f7fb;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.topbar {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid #d9e1ea;
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  padding: 18px 24px;
+}
+
+.topbar h1 {
+  color: #172033;
+  font-size: 20px;
+  font-weight: 720;
+  letter-spacing: 0;
+  line-height: 1.2;
+  margin: 2px 0 0;
+}
+
+.eyebrow {
+  color: #0f766e;
+  font-size: 13px;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.primary-action {
+  align-items: center;
+  background: #172033;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  display: inline-flex;
+  font-weight: 700;
+  min-height: 40px;
+  padding: 0 16px;
+  white-space: nowrap;
+}
+
+.primary-action:disabled {
+  opacity: 0.55;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  min-height: 0;
+}
+
+.toolbar {
+  background: #ffffff;
+  border-right: 1px solid #d9e1ea;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-height: calc(100vh - 77px);
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.control-section,
+.control-grid label {
+  display: grid;
+  gap: 8px;
+}
+
+.control-label {
+  color: #5a6576;
+  display: block;
+  font-size: 12px;
+  font-weight: 760;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.code-input,
+input,
+select {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  color: #172033;
+  outline: none;
+}
+
+.code-input:focus,
+input:focus,
+select:focus {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+}
+
+.code-input {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  min-height: 180px;
+  padding: 12px;
+  resize: vertical;
+}
+
+input,
+select {
+  min-height: 38px;
+  padding: 0 10px;
+}
+
+input[type='range'] {
+  accent-color: #0f766e;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  min-height: auto;
+  padding: 0;
+}
+
+input[type='checkbox'] {
+  accent-color: #0f766e;
+  min-height: auto;
+}
+
+.range-grid {
+  align-items: center;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr auto;
+}
+
+.range-grid input {
+  grid-column: 1 / -1;
+}
+
+.range-grid span {
+  color: #172033;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.control-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.toggle-list {
+  border-top: 1px solid #e2e8f0;
+  display: grid;
+  gap: 12px;
+  padding-top: 16px;
+}
+
+.toggle-list label {
+  align-items: center;
+  color: #263244;
+  display: flex;
+  font-size: 14px;
+  gap: 8px;
+}
+
+.canvas-stage {
+  background:
+    linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px), #eef3f8;
+  background-size: 24px 24px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.canvas-scroll {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - 77px);
+  overflow: auto;
+  padding: 32px;
+}
+
+.export-canvas {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  max-width: min(100%, 1200px);
+  min-height: 420px;
+  min-width: min(100%, 640px);
+}
+
+.snippet-card {
+  background: #101827;
+  color: #dbeafe;
+  min-width: min(100%, 620px);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.window-frame {
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(226, 232, 240, 0.74);
+  display: flex;
+  font-size: 13px;
+  font-weight: 650;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 16px;
+}
+
+.window-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.macos-frame .window-title {
+  margin-left: 8px;
+}
+
+.traffic-light {
+  border-radius: 999px;
+  display: inline-flex;
+  height: 12px;
+  width: 12px;
+}
+
+.traffic-light.red {
+  background: #ff5f57;
+}
+
+.traffic-light.yellow {
+  background: #ffbd2e;
+}
+
+.traffic-light.green {
+  background: #28c840;
+}
+
+.windows11-frame,
+.linux-kde-frame,
+.chromeos-frame {
+  justify-content: space-between;
+}
+
+.window-controls {
+  display: inline-flex;
+  gap: 14px;
+}
+
+.gnome-frame {
+  justify-content: center;
+  position: relative;
+}
+
+.gnome-close {
+  align-items: center;
+  background: rgba(248, 113, 113, 0.2);
+  border-radius: 999px;
+  color: #fecaca;
+  display: inline-flex;
+  height: 22px;
+  justify-content: center;
+  left: 14px;
+  position: absolute;
+  width: 22px;
+}
+
+.i3-frame {
+  background: #172033;
+  min-height: 30px;
+}
+
+.code-preview {
+  padding: 24px;
+}
+
+.code-line {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: auto minmax(0, 1fr);
+  min-height: 1.5em;
+  transition: opacity 160ms ease;
+}
+
+.code-line.is-dimmed {
+  opacity: 0.35;
+}
+
+.line-number {
+  background: transparent;
+  border: 0;
+  color: rgba(148, 163, 184, 0.8);
+  font: inherit;
+  min-width: 2ch;
+  padding: 0;
+  text-align: right;
+}
+
+.line-number.is-highlighted {
+  color: #67e8f9;
+}
+
+.wrap-code,
+.nowrap-code {
+  display: block;
+  min-width: 0;
+  white-space: pre-wrap;
+}
+
+.nowrap-code {
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.watermark {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  bottom: 14px;
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 12px;
+  padding: 5px 9px;
+  position: absolute;
+  right: 14px;
+}
+
+@media (max-width: 900px) {
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar {
+    border-bottom: 1px solid #d9e1ea;
+    border-right: 0;
+    max-height: none;
+  }
+
+  .canvas-scroll {
+    min-height: 520px;
+    padding: 20px;
+  }
+
+  .export-canvas {
+    min-width: 100%;
+  }
+}
