@@ -1,7 +1,13 @@
 import { useState } from 'react'
 import { toBlob, toPng } from 'html-to-image'
 
-type ExportStatus = 'idle' | 'exporting' | 'copied' | 'downloaded' | 'error'
+type ExportStatus =
+  | 'idle'
+  | 'exporting'
+  | 'copied'
+  | 'downloaded'
+  | 'downloadedFallback'
+  | 'error'
 
 export function ExportButton() {
   const [status, setStatus] = useState<ExportStatus>('idle')
@@ -21,17 +27,10 @@ export function ExportButton() {
   async function downloadPng() {
     try {
       setStatus('exporting')
-
       const target = await getExportTarget()
-      const dataUrl = await toPng(target, {
-        cacheBust: true,
-        pixelRatio: 2,
-      })
-      const link = document.createElement('a')
+      const dataUrl = await getPngDataUrl(target)
 
-      link.download = `fotosnip-${new Date().toISOString().slice(0, 10)}.png`
-      link.href = dataUrl
-      link.click()
+      downloadDataUrl(dataUrl)
 
       setStatus('downloaded')
     } catch {
@@ -44,13 +43,14 @@ export function ExportButton() {
       setStatus('exporting')
 
       const target = await getExportTarget()
-      const blob = await toBlob(target, {
-        cacheBust: true,
-        pixelRatio: 2,
-      })
+      const blob = await getPngBlob(target)
 
       if (!blob || !navigator.clipboard || !('ClipboardItem' in window)) {
-        throw new Error('PNG clipboard copy is not supported')
+        const dataUrl = await getPngDataUrl(target)
+
+        downloadDataUrl(dataUrl)
+        setStatus('downloadedFallback')
+        return
       }
 
       await navigator.clipboard.write([
@@ -61,7 +61,15 @@ export function ExportButton() {
 
       setStatus('copied')
     } catch {
-      setStatus('error')
+      try {
+        const target = await getExportTarget()
+        const dataUrl = await getPngDataUrl(target)
+
+        downloadDataUrl(dataUrl)
+        setStatus('downloadedFallback')
+      } catch {
+        setStatus('error')
+      }
     }
   }
 
@@ -88,8 +96,31 @@ export function ExportButton() {
       <span className="export-status" role="status">
         {status === 'copied' ? 'Copied' : null}
         {status === 'downloaded' ? 'Downloaded' : null}
+        {status === 'downloadedFallback' ? 'Downloaded instead' : null}
         {status === 'error' ? 'Export failed' : null}
       </span>
     </div>
   )
+}
+
+function getPngBlob(target: HTMLElement) {
+  return toBlob(target, {
+    cacheBust: true,
+    pixelRatio: 2,
+  })
+}
+
+function getPngDataUrl(target: HTMLElement) {
+  return toPng(target, {
+    cacheBust: true,
+    pixelRatio: 2,
+  })
+}
+
+function downloadDataUrl(dataUrl: string) {
+  const link = document.createElement('a')
+
+  link.download = `fotosnip-${new Date().toISOString().slice(0, 10)}.png`
+  link.href = dataUrl
+  link.click()
 }

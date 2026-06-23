@@ -114,12 +114,11 @@ Acceptance:
 
 ### 9. AI Annotations
 
-Add the Gemini-powered annotation flow with a user-supplied API key stored in
-localStorage.
+Add the Gemini-powered annotation flow using the app's configured Gemini API key.
 
 Acceptance:
 
-- Users can set an API key, select explain/teach/review mode, and request annotations.
+- Users can select explain/teach/review mode and request annotations.
 - Gemini requests use structured JSON output.
 - Users can edit, delete, and regenerate annotations before export.
 - Annotations render inside the screenshot canvas and export with the image.
