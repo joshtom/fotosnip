@@ -17,6 +17,7 @@ import {
   useEditorStore,
 } from '../../store/editorStore'
 import { CodeEditor } from '../Editor/CodeEditor'
+import { PresetManager } from './PresetManager'
 
 export function Toolbar() {
   const language = useEditorStore((state) => state.language)
@@ -364,6 +365,8 @@ export function Toolbar() {
           Watermark
         </label>
       </section>
+
+      <PresetManager />
     </aside>
   )
 }

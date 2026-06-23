@@ -102,6 +102,53 @@ const defaultCode = `function debounce(callback, delay = 300) {
   }
 }`
 
+const presetsStorageKey = 'fotosnip.presets'
+
+function readStoredPresets(): Preset[] {
+  if (typeof window === 'undefined') {
+    return []
+  }
+
+  try {
+    const storedValue = window.localStorage.getItem(presetsStorageKey)
+
+    if (!storedValue) {
+      return []
+    }
+
+    const parsedValue = JSON.parse(storedValue)
+
+    if (!Array.isArray(parsedValue)) {
+      return []
+    }
+
+    return parsedValue
+      .filter((item): item is Preset => {
+        return (
+          typeof item === 'object' &&
+          item !== null &&
+          typeof item.name === 'string' &&
+          typeof item.settings === 'object' &&
+          item.settings !== null
+        )
+      })
+      .slice(0, 5)
+  } catch {
+    return []
+  }
+}
+
+function writeStoredPresets(presets: Preset[]) {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  window.localStorage.setItem(
+    presetsStorageKey,
+    JSON.stringify(presets.slice(0, 5)),
+  )
+}
+
 const getPresetSettings = (
   state: EditorState,
 ): Partial<Omit<EditorSettings, 'presets'>> => ({
@@ -148,7 +195,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   annotationsLoading: false,
   canvasSize: 'auto',
   customWidth: 1200,
-  presets: [],
+  presets: readStoredPresets(),
   setCode: (code) => set({ code }),
   setLanguage: (language) => set({ language }),
   setFrameStyle: (frameStyle) => set({ frameStyle }),
@@ -182,7 +229,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       const trimmedName = name.trim()
 
       if (!trimmedName) {
-        return state
+        return {}
       }
 
       const nextPreset = {
@@ -192,9 +239,11 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       const withoutExisting = state.presets.filter(
         (preset) => preset.name !== trimmedName,
       )
+      const nextPresets = [nextPreset, ...withoutExisting].slice(0, 5)
 
+      writeStoredPresets(nextPresets)
       return {
-        presets: [nextPreset, ...withoutExisting].slice(0, 5),
+        presets: nextPresets,
       }
     }),
   applyPreset: (name) => {
@@ -205,13 +254,25 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     }
   },
   deletePreset: (name) =>
-    set((state) => ({
-      presets: state.presets.filter((preset) => preset.name !== name),
-    })),
+    set((state) => {
+      const nextPresets = state.presets.filter((preset) => preset.name !== name)
+
+      writeStoredPresets(nextPresets)
+      return { presets: nextPresets }
+    }),
   renamePreset: (fromName, toName) =>
-    set((state) => ({
-      presets: state.presets.map((preset) =>
-        preset.name === fromName ? { ...preset, name: toName.trim() } : preset,
-      ),
-    })),
+    set((state) => {
+      const trimmedName = toName.trim()
+
+      if (!trimmedName) {
+        return {}
+      }
+
+      const nextPresets = state.presets.map((preset) =>
+        preset.name === fromName ? { ...preset, name: trimmedName } : preset,
+      )
+
+      writeStoredPresets(nextPresets)
+      return { presets: nextPresets }
+    }),
 }))
