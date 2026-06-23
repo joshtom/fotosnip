@@ -160,6 +160,23 @@ input[type='checkbox'] {
   min-height: auto;
 }
 
+input[type='color'] {
+  border: 0;
+  height: 38px;
+  min-height: 38px;
+  padding: 0;
+  width: 54px;
+}
+
+.swatch-row {
+  align-items: center;
+  color: #263244;
+  display: flex;
+  font-size: 13px;
+  font-weight: 700;
+  gap: 10px;
+}
+
 .range-grid {
   align-items: center;
   display: grid;

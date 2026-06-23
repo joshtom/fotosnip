@@ -1,7 +1,9 @@
 import {
+  backgroundTypeOptions,
   canvasSizeOptions,
   fontOptions,
   frameOptions,
+  gradientOptions,
   languageOptions,
   paddingOptions,
   shadowOptions,
@@ -27,7 +29,9 @@ export function Toolbar() {
   const padding = useEditorStore((state) => state.padding)
   const borderRadius = useEditorStore((state) => state.borderRadius)
   const shadow = useEditorStore((state) => state.shadow)
+  const background = useEditorStore((state) => state.background)
   const canvasSize = useEditorStore((state) => state.canvasSize)
+  const customWidth = useEditorStore((state) => state.customWidth)
   const showLineNumbers = useEditorStore((state) => state.showLineNumbers)
   const wordWrap = useEditorStore((state) => state.wordWrap)
   const showWatermark = useEditorStore((state) => state.showWatermark)
@@ -44,7 +48,9 @@ export function Toolbar() {
   const setPadding = useEditorStore((state) => state.setPadding)
   const setBorderRadius = useEditorStore((state) => state.setBorderRadius)
   const setShadow = useEditorStore((state) => state.setShadow)
+  const setBackground = useEditorStore((state) => state.setBackground)
   const setCanvasSize = useEditorStore((state) => state.setCanvasSize)
+  const setCustomWidth = useEditorStore((state) => state.setCustomWidth)
   const setShowLineNumbers = useEditorStore(
     (state) => state.setShowLineNumbers,
   )
@@ -218,6 +224,68 @@ export function Toolbar() {
       </section>
 
       <section className="control-section">
+        <label className="control-label" htmlFor="background-type">
+          Background
+        </label>
+        <select
+          id="background-type"
+          value={background.type}
+          onChange={(event) => {
+            const nextType = event.target.value
+
+            if (nextType === 'solid') {
+              setBackground({ type: 'solid', value: '#0f172a' })
+            } else if (nextType === 'gradient') {
+              setBackground({ type: 'gradient', value: gradientOptions[0].value })
+            } else {
+              setBackground({ type: 'transparent', value: 'transparent' })
+            }
+          }}
+        >
+          {backgroundTypeOptions.map((item) => (
+            <option key={item.value} value={item.value}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+      </section>
+
+      {background.type === 'solid' ? (
+        <section className="swatch-row">
+          <input
+            aria-label="Background color"
+            type="color"
+            value={background.value}
+            onChange={(event) =>
+              setBackground({ type: 'solid', value: event.target.value })
+            }
+          />
+          <span>{background.value}</span>
+        </section>
+      ) : null}
+
+      {background.type === 'gradient' ? (
+        <section className="control-section">
+          <label className="control-label" htmlFor="gradient-select">
+            Gradient
+          </label>
+          <select
+            id="gradient-select"
+            value={background.value}
+            onChange={(event) =>
+              setBackground({ type: 'gradient', value: event.target.value })
+            }
+          >
+            {gradientOptions.map((item) => (
+              <option key={item.value} value={item.value}>
+                {item.label}
+              </option>
+            ))}
+          </select>
+        </section>
+      ) : null}
+
+      <section className="control-section">
         <label className="control-label" htmlFor="canvas-size">
           Canvas size
         </label>
@@ -233,6 +301,24 @@ export function Toolbar() {
           ))}
         </select>
       </section>
+
+      {canvasSize === 'custom' ? (
+        <section className="range-grid">
+          <label className="control-label" htmlFor="custom-width">
+            Custom width
+          </label>
+          <span>{customWidth}px</span>
+          <input
+            id="custom-width"
+            max="1800"
+            min="640"
+            step="20"
+            type="range"
+            value={customWidth}
+            onChange={(event) => setCustomWidth(Number(event.target.value))}
+          />
+        </section>
+      ) : null}
 
       <section className="toggle-list">
         <label>

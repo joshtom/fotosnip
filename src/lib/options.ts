@@ -1,4 +1,5 @@
 import type {
+  Background,
   CanvasSize,
   FrameStyle,
   PaddingSize,
@@ -95,4 +96,64 @@ export const canvasSizeOptions: Array<{ value: CanvasSize; label: string }> = [
   { value: 'instagram-square', label: 'Instagram square' },
   { value: 'instagram-story', label: 'Instagram story' },
   { value: 'custom', label: 'Custom width' },
+]
+
+export const backgroundTypeOptions: Array<{
+  value: Background['type']
+  label: string
+}> = [
+  { value: 'solid', label: 'Solid' },
+  { value: 'gradient', label: 'Gradient' },
+  { value: 'transparent', label: 'Transparent' },
+]
+
+export const gradientOptions = [
+  {
+    label: 'Deep Teal',
+    value: 'linear-gradient(135deg, #0f172a 0%, #155e75 50%, #f97316 100%)',
+  },
+  {
+    label: 'Aurora',
+    value: 'linear-gradient(135deg, #111827 0%, #0f766e 45%, #a3e635 100%)',
+  },
+  {
+    label: 'Cherry Ink',
+    value: 'linear-gradient(135deg, #1f2937 0%, #be123c 50%, #fb7185 100%)',
+  },
+  {
+    label: 'Cobalt Sun',
+    value: 'linear-gradient(135deg, #0c4a6e 0%, #2563eb 45%, #facc15 100%)',
+  },
+  {
+    label: 'Forest Mist',
+    value: 'linear-gradient(135deg, #052e16 0%, #16a34a 45%, #ccfbf1 100%)',
+  },
+  {
+    label: 'Graphite',
+    value: 'linear-gradient(135deg, #030712 0%, #374151 52%, #d1d5db 100%)',
+  },
+  {
+    label: 'Indigo Heat',
+    value: 'linear-gradient(135deg, #312e81 0%, #7c3aed 50%, #f97316 100%)',
+  },
+  {
+    label: 'Lagoon',
+    value: 'linear-gradient(135deg, #083344 0%, #0891b2 48%, #a7f3d0 100%)',
+  },
+  {
+    label: 'Mango Slate',
+    value: 'linear-gradient(135deg, #334155 0%, #ea580c 45%, #fde68a 100%)',
+  },
+  {
+    label: 'Rose Quartz',
+    value: 'linear-gradient(135deg, #4c0519 0%, #e11d48 42%, #fecdd3 100%)',
+  },
+  {
+    label: 'Silver Blue',
+    value: 'linear-gradient(135deg, #e0f2fe 0%, #60a5fa 50%, #1e293b 100%)',
+  },
+  {
+    label: 'Volt',
+    value: 'linear-gradient(135deg, #18181b 0%, #84cc16 48%, #f8fafc 100%)',
+  },
 ]
