@@ -8,14 +8,18 @@ type GeminiAnnotation = {
 }
 
 export async function generateCodeAnnotations({
-  apiKey,
   code,
   mode,
 }: {
-  apiKey: string
   code: string
   mode: AnnotationMode
 }): Promise<Annotation[]> {
+  const apiKey = import.meta.env.GEMINI_API_KEY?.trim()
+
+  if (!apiKey) {
+    throw new Error('Gemini API key is not configured')
+  }
+
   const ai = new GoogleGenAI({ apiKey })
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash',

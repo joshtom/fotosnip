@@ -1,8 +1,9 @@
 import { useAnnotations } from './useAnnotations'
 import { useEditorStore } from '../../store/editorStore'
+import { Select } from '../ui/Select'
 
 export function AnnotationPanel() {
-  const { apiKey, setApiKey, requestAnnotations } = useAnnotations()
+  const { requestAnnotations } = useAnnotations()
   const annotationsEnabled = useEditorStore(
     (state) => state.annotationsEnabled,
   )
@@ -27,30 +28,19 @@ export function AnnotationPanel() {
         <span>{annotations.length}/8</span>
       </div>
 
-      <label className="control-section">
-        <span className="control-label">Gemini API key</span>
-        <input
-          autoComplete="off"
-          placeholder="Stored locally"
-          type="password"
-          value={apiKey}
-          onChange={(event) => setApiKey(event.target.value)}
-        />
-      </label>
-
-      <label className="control-section">
+      <div className="control-section">
         <span className="control-label">Mode</span>
-        <select
+        <Select
+          ariaLabel="Annotation mode"
+          options={[
+            { value: 'explain', label: 'Explain' },
+            { value: 'teach', label: 'Teach' },
+            { value: 'review', label: 'Review' },
+          ]}
           value={annotationMode}
-          onChange={(event) =>
-            setAnnotationMode(event.target.value as typeof annotationMode)
-          }
-        >
-          <option value="explain">Explain</option>
-          <option value="teach">Teach</option>
-          <option value="review">Review</option>
-        </select>
-      </label>
+          onValueChange={setAnnotationMode}
+        />
+      </div>
 
       <button
         className="annotation-action"

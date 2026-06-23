@@ -1,32 +1,7 @@
-import { useState } from 'react'
-
 import { generateCodeAnnotations } from '../../lib/gemini'
 import { useEditorStore } from '../../store/editorStore'
 
-const apiKeyStorageKey = 'fotosnip.geminiApiKey'
-
-function readStoredApiKey() {
-  if (typeof window === 'undefined') {
-    return ''
-  }
-
-  return window.localStorage.getItem(apiKeyStorageKey) ?? ''
-}
-
-function writeStoredApiKey(apiKey: string) {
-  if (typeof window === 'undefined') {
-    return
-  }
-
-  if (apiKey.trim()) {
-    window.localStorage.setItem(apiKeyStorageKey, apiKey.trim())
-  } else {
-    window.localStorage.removeItem(apiKeyStorageKey)
-  }
-}
-
 export function useAnnotations() {
-  const [apiKey, setApiKeyState] = useState(readStoredApiKey)
   const code = useEditorStore((state) => state.code)
   const annotationMode = useEditorStore((state) => state.annotationMode)
   const setAnnotations = useEditorStore((state) => state.setAnnotations)
@@ -37,16 +12,9 @@ export function useAnnotations() {
     (state) => state.setAnnotationsError,
   )
 
-  function setApiKey(nextApiKey: string) {
-    setApiKeyState(nextApiKey)
-    writeStoredApiKey(nextApiKey)
-  }
-
   async function requestAnnotations() {
-    const trimmedApiKey = apiKey.trim()
-
-    if (!trimmedApiKey) {
-      setAnnotationsError('Add a Gemini API key first.')
+    if (!import.meta.env.GEMINI_API_KEY?.trim()) {
+      setAnnotationsError('Gemini API key is not configured.')
       return
     }
 
@@ -59,7 +27,6 @@ export function useAnnotations() {
       setAnnotationsLoading(true)
       setAnnotationsError('')
       const nextAnnotations = await generateCodeAnnotations({
-        apiKey: trimmedApiKey,
         code,
         mode: annotationMode,
       })
@@ -73,8 +40,6 @@ export function useAnnotations() {
   }
 
   return {
-    apiKey,
-    setApiKey,
     requestAnnotations,
   }
 }

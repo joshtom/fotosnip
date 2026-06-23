@@ -10,6 +10,7 @@ import {
   themeOptions,
 } from '../../lib/options'
 import {
+  type Background,
   type CanvasSize,
   type FrameStyle,
   type PaddingSize,
@@ -18,7 +19,18 @@ import {
 } from '../../store/editorStore'
 import { CodeEditor } from '../Editor/CodeEditor'
 import { AnnotationPanel } from '../AI/AnnotationPanel'
+import { Select } from '../ui/Select'
 import { PresetManager } from './PresetManager'
+
+const languageSelectOptions = languageOptions.map((item) => ({
+  value: item,
+  label: item,
+}))
+
+const fontSelectOptions = fontOptions.map((item) => ({
+  value: item,
+  label: item,
+}))
 
 export function Toolbar() {
   const language = useEditorStore((state) => state.language)
@@ -72,37 +84,23 @@ export function Toolbar() {
       </section>
 
       <section className="control-section">
-        <label className="control-label" htmlFor="language-select">
-          Language
-        </label>
-        <select
-          id="language-select"
+        <span className="control-label">Language</span>
+        <Select
+          ariaLabel="Language"
+          options={languageSelectOptions}
           value={language}
-          onChange={(event) => setLanguage(event.target.value)}
-        >
-          {languageOptions.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
+          onValueChange={setLanguage}
+        />
       </section>
 
       <section className="control-section">
-        <label className="control-label" htmlFor="frame-select">
-          Frame style
-        </label>
-        <select
-          id="frame-select"
+        <span className="control-label">Frame style</span>
+        <Select
+          ariaLabel="Frame style"
+          options={frameOptions}
           value={frameStyle}
-          onChange={(event) => setFrameStyle(event.target.value as FrameStyle)}
-        >
-          {frameOptions.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </select>
+          onValueChange={(value) => setFrameStyle(value as FrameStyle)}
+        />
       </section>
 
       <section className="control-section">
@@ -119,37 +117,23 @@ export function Toolbar() {
       </section>
 
       <section className="control-section">
-        <label className="control-label" htmlFor="theme-select">
-          Theme
-        </label>
-        <select
-          id="theme-select"
+        <span className="control-label">Theme</span>
+        <Select
+          ariaLabel="Theme"
+          options={themeOptions}
           value={theme}
-          onChange={(event) => setTheme(event.target.value)}
-        >
-          {themeOptions.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </select>
+          onValueChange={setTheme}
+        />
       </section>
 
       <section className="control-section">
-        <label className="control-label" htmlFor="font-select">
-          Font
-        </label>
-        <select
-          id="font-select"
+        <span className="control-label">Font</span>
+        <Select
+          ariaLabel="Font"
+          options={fontSelectOptions}
           value={fontFamily}
-          onChange={(event) => setFontFamily(event.target.value)}
-        >
-          {fontOptions.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
+          onValueChange={setFontFamily}
+        />
       </section>
 
       <section className="range-grid">
@@ -186,29 +170,21 @@ export function Toolbar() {
       <section className="control-grid">
         <label>
           <span className="control-label">Padding</span>
-          <select
+          <Select
+            ariaLabel="Padding"
+            options={paddingOptions}
             value={padding}
-            onChange={(event) => setPadding(event.target.value as PaddingSize)}
-          >
-            {paddingOptions.map((item) => (
-              <option key={item.value} value={item.value}>
-                {item.label}
-              </option>
-            ))}
-          </select>
+            onValueChange={(value) => setPadding(value as PaddingSize)}
+          />
         </label>
         <label>
           <span className="control-label">Shadow</span>
-          <select
+          <Select
+            ariaLabel="Shadow"
+            options={shadowOptions}
             value={shadow}
-            onChange={(event) => setShadow(event.target.value as ShadowSize)}
-          >
-            {shadowOptions.map((item) => (
-              <option key={item.value} value={item.value}>
-                {item.label}
-              </option>
-            ))}
-          </select>
+            onValueChange={(value) => setShadow(value as ShadowSize)}
+          />
         </label>
       </section>
 
@@ -228,30 +204,26 @@ export function Toolbar() {
       </section>
 
       <section className="control-section">
-        <label className="control-label" htmlFor="background-type">
-          Background
-        </label>
-        <select
-          id="background-type"
+        <span className="control-label">Background</span>
+        <Select
+          ariaLabel="Background"
+          options={backgroundTypeOptions}
           value={background.type}
-          onChange={(event) => {
-            const nextType = event.target.value
+          onValueChange={(nextType) => {
+            const typedNextType = nextType as Background['type']
 
-            if (nextType === 'solid') {
+            if (typedNextType === 'solid') {
               setBackground({ type: 'solid', value: '#0f172a' })
-            } else if (nextType === 'gradient') {
-              setBackground({ type: 'gradient', value: gradientOptions[0].value })
+            } else if (typedNextType === 'gradient') {
+              setBackground({
+                type: 'gradient',
+                value: gradientOptions[0].value,
+              })
             } else {
               setBackground({ type: 'transparent', value: 'transparent' })
             }
           }}
-        >
-          {backgroundTypeOptions.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </select>
+        />
       </section>
 
       {background.type === 'solid' ? (
@@ -270,40 +242,26 @@ export function Toolbar() {
 
       {background.type === 'gradient' ? (
         <section className="control-section">
-          <label className="control-label" htmlFor="gradient-select">
-            Gradient
-          </label>
-          <select
-            id="gradient-select"
+          <span className="control-label">Gradient</span>
+          <Select
+            ariaLabel="Gradient"
+            options={gradientOptions}
             value={background.value}
-            onChange={(event) =>
-              setBackground({ type: 'gradient', value: event.target.value })
+            onValueChange={(value) =>
+              setBackground({ type: 'gradient', value })
             }
-          >
-            {gradientOptions.map((item) => (
-              <option key={item.value} value={item.value}>
-                {item.label}
-              </option>
-            ))}
-          </select>
+          />
         </section>
       ) : null}
 
       <section className="control-section">
-        <label className="control-label" htmlFor="canvas-size">
-          Canvas size
-        </label>
-        <select
-          id="canvas-size"
+        <span className="control-label">Canvas size</span>
+        <Select
+          ariaLabel="Canvas size"
+          options={canvasSizeOptions}
           value={canvasSize}
-          onChange={(event) => setCanvasSize(event.target.value as CanvasSize)}
-        >
-          {canvasSizeOptions.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </select>
+          onValueChange={(value) => setCanvasSize(value as CanvasSize)}
+        />
       </section>
 
       {canvasSize === 'custom' ? (
