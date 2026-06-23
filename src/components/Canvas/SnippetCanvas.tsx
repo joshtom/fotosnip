@@ -87,6 +87,7 @@ export function SnippetCanvas() {
       <div className="canvas-scroll">
         <div
           className="export-canvas"
+          data-export-target="true"
           style={{
             ...canvasStyle,
             background: backgroundValue,

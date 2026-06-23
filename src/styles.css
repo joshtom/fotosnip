@@ -83,8 +83,37 @@ button:disabled {
   white-space: nowrap;
 }
 
-.primary-action:disabled {
+.secondary-action {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  color: #172033;
+  display: inline-flex;
+  font-weight: 700;
+  min-height: 40px;
+  padding: 0 14px;
+  white-space: nowrap;
+}
+
+.primary-action:disabled,
+.secondary-action:disabled {
   opacity: 0.55;
+}
+
+.export-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.export-status {
+  color: #5a6576;
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 86px;
 }
 
 .workspace {
@@ -237,7 +266,6 @@ input[type='color'] {
   align-items: center;
   display: flex;
   justify-content: center;
-  max-width: min(100%, 1200px);
   min-height: 420px;
   min-width: min(100%, 640px);
 }
