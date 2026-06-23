@@ -34,6 +34,7 @@ export function Toolbar() {
   const customWidth = useEditorStore((state) => state.customWidth)
   const showLineNumbers = useEditorStore((state) => state.showLineNumbers)
   const wordWrap = useEditorStore((state) => state.wordWrap)
+  const highlightedLines = useEditorStore((state) => state.highlightedLines)
   const showWatermark = useEditorStore((state) => state.showWatermark)
   const annotationsEnabled = useEditorStore(
     (state) => state.annotationsEnabled,
@@ -55,6 +56,7 @@ export function Toolbar() {
     (state) => state.setShowLineNumbers,
   )
   const setWordWrap = useEditorStore((state) => state.setWordWrap)
+  const clearHighlights = useEditorStore((state) => state.clearHighlights)
   const setShowWatermark = useEditorStore((state) => state.setShowWatermark)
   const setAnnotationsEnabled = useEditorStore(
     (state) => state.setAnnotationsEnabled,
@@ -329,6 +331,14 @@ export function Toolbar() {
           />
           Line numbers
         </label>
+        {highlightedLines.length > 0 ? (
+          <div className="inline-action-row">
+            <span>{highlightedLines.length} highlighted</span>
+            <button type="button" onClick={clearHighlights}>
+              Clear
+            </button>
+          </div>
+        ) : null}
         <label>
           <input
             checked={wordWrap}
