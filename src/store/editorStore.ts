@@ -17,6 +17,7 @@ export type Background =
   | { type: 'transparent'; value: 'transparent' }
 
 export type AnnotationMode = 'explain' | 'teach' | 'review'
+export type CanvasMode = 'dark' | 'light'
 export type CanvasSize =
   | 'auto'
   | 'twitter'
@@ -52,6 +53,7 @@ export type EditorSettings = {
   annotations: Annotation[]
   annotationsLoading: boolean
   annotationsError: string
+  canvasMode: CanvasMode
   canvasSize: CanvasSize
   customWidth: number
   presets: Preset[]
@@ -87,6 +89,7 @@ type EditorActions = {
   deleteAnnotation: (line: number) => void
   setAnnotationsLoading: (annotationsLoading: boolean) => void
   setAnnotationsError: (annotationsError: string) => void
+  setCanvasMode: (canvasMode: CanvasMode) => void
   setCanvasSize: (canvasSize: CanvasSize) => void
   setCustomWidth: (customWidth: number) => void
   savePreset: (name: string) => void
@@ -166,6 +169,7 @@ const getPresetSettings = (
   borderRadius: state.borderRadius,
   shadow: state.shadow,
   background: state.background,
+  canvasMode: state.canvasMode,
   showLineNumbers: state.showLineNumbers,
   wordWrap: state.wordWrap,
   showWatermark: state.showWatermark,
@@ -185,10 +189,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   padding: 'm',
   borderRadius: 14,
   shadow: 'medium',
-  background: {
-    type: 'gradient',
-    value: 'linear-gradient(135deg, #0f172a 0%, #155e75 50%, #f97316 100%)',
-  },
+  background: { type: 'solid', value: '#09090b' },
   showLineNumbers: true,
   wordWrap: true,
   highlightedLines: [],
@@ -198,6 +199,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   annotations: [],
   annotationsLoading: false,
   annotationsError: '',
+  canvasMode: 'dark',
   canvasSize: 'auto',
   customWidth: 1200,
   presets: readStoredPresets(),
@@ -240,6 +242,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     })),
   setAnnotationsLoading: (annotationsLoading) => set({ annotationsLoading }),
   setAnnotationsError: (annotationsError) => set({ annotationsError }),
+  setCanvasMode: (canvasMode) => set({ canvasMode }),
   setCanvasSize: (canvasSize) => set({ canvasSize }),
   setCustomWidth: (customWidth) => set({ customWidth }),
   savePreset: (name) =>

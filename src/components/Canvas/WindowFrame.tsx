@@ -3,11 +3,22 @@ import { useEditorStore } from '../../store/editorStore'
 export function WindowFrame() {
   const frameStyle = useEditorStore((state) => state.frameStyle)
   const windowTitle = useEditorStore((state) => state.windowTitle)
-  const title = windowTitle.trim()
+  const setWindowTitle = useEditorStore((state) => state.setWindowTitle)
 
   if (frameStyle === 'frameless') {
     return null
   }
+
+  const titleInput = (fallback: string) => (
+    <input
+      aria-label="Window title"
+      className="window-title-input"
+      placeholder={fallback}
+      type="text"
+      value={windowTitle}
+      onChange={(event) => setWindowTitle(event.target.value)}
+    />
+  )
 
   switch (frameStyle) {
     case 'macos':
@@ -18,13 +29,13 @@ export function WindowFrame() {
             <span className="traffic-light yellow" />
             <span className="traffic-light green" />
           </span>
-          <span className="window-title">{title}</span>
+          {titleInput('utils.ts')}
         </div>
       )
     case 'windows11':
       return (
         <div className="window-frame frame-windows">
-          <span className="window-title">{title}</span>
+          {titleInput('utils.ts')}
           <span className="window-controls controls-windows" aria-hidden="true">
             <span className="control-icon minimize" />
             <span className="control-icon maximize" />
@@ -36,14 +47,14 @@ export function WindowFrame() {
       return (
         <div className="window-frame frame-gnome">
           <span className="gnome-close" aria-hidden="true" />
-          <span className="window-title">{title}</span>
+          {titleInput('utils.ts')}
           <span className="gnome-menu" aria-hidden="true" />
         </div>
       )
     case 'linux-kde':
       return (
         <div className="window-frame frame-kde">
-          <span className="window-title">{title}</span>
+          {titleInput('utils.ts')}
           <span className="window-controls controls-kde" aria-hidden="true">
             <span className="control-icon kde-close" />
             <span className="control-icon minimize" />
@@ -54,7 +65,7 @@ export function WindowFrame() {
     case 'linux-i3':
       return (
         <div className="window-frame frame-i3">
-          <span className="window-title">{title || 'workspace 1'}</span>
+          {titleInput('workspace 1')}
         </div>
       )
     case 'chromeos':
@@ -62,7 +73,7 @@ export function WindowFrame() {
         <div className="window-frame frame-chromeos">
           <span className="chrome-tab">
             <span className="chrome-dot" aria-hidden="true" />
-            <span className="window-title">{title || 'untitled'}</span>
+            {titleInput('untitled')}
           </span>
           <span className="window-controls controls-chromeos" aria-hidden="true">
             <span className="control-icon close" />

@@ -1,12 +1,5 @@
-import { useEffect, useState } from 'react'
-
-import { Annotations } from './Annotations'
+import { CodeEditor } from '../Editor/CodeEditor'
 import { WindowFrame } from './WindowFrame'
-import {
-  type HighlightToken,
-  type HighlightedCode,
-  highlightCodeToLines,
-} from '../../lib/shiki'
 import { useEditorStore } from '../../store/editorStore'
 
 const paddingMap = {
@@ -19,10 +12,10 @@ const paddingMap = {
 
 const shadowMap = {
   none: 'none',
-  soft: '0 16px 40px rgba(15, 23, 42, 0.18)',
-  medium: '0 28px 70px rgba(15, 23, 42, 0.28)',
-  strong: '0 38px 90px rgba(15, 23, 42, 0.36)',
-  dramatic: '0 48px 120px rgba(15, 23, 42, 0.5)',
+  soft: '0 18px 48px rgba(0, 0, 0, 0.28)',
+  medium: '0 30px 80px rgba(0, 0, 0, 0.36)',
+  strong: '0 42px 110px rgba(0, 0, 0, 0.46)',
+  dramatic: '0 56px 150px rgba(0, 0, 0, 0.6)',
 }
 
 const canvasMap = {
@@ -35,51 +28,19 @@ const canvasMap = {
 }
 
 export function SnippetCanvas() {
-  const code = useEditorStore((state) => state.code)
-  const language = useEditorStore((state) => state.language)
-  const theme = useEditorStore((state) => state.theme)
-  const fontFamily = useEditorStore((state) => state.fontFamily)
-  const fontSize = useEditorStore((state) => state.fontSize)
-  const lineHeight = useEditorStore((state) => state.lineHeight)
   const padding = useEditorStore((state) => state.padding)
   const borderRadius = useEditorStore((state) => state.borderRadius)
   const shadow = useEditorStore((state) => state.shadow)
   const background = useEditorStore((state) => state.background)
-  const showLineNumbers = useEditorStore((state) => state.showLineNumbers)
-  const wordWrap = useEditorStore((state) => state.wordWrap)
-  const highlightedLines = useEditorStore((state) => state.highlightedLines)
   const showWatermark = useEditorStore((state) => state.showWatermark)
   const annotationsEnabled = useEditorStore(
     (state) => state.annotationsEnabled,
   )
   const annotations = useEditorStore((state) => state.annotations)
+  const canvasMode = useEditorStore((state) => state.canvasMode)
   const canvasSize = useEditorStore((state) => state.canvasSize)
   const customWidth = useEditorStore((state) => state.customWidth)
-  const toggleLineHighlight = useEditorStore(
-    (state) => state.toggleLineHighlight,
-  )
-  const [highlightedCode, setHighlightedCode] = useState<HighlightedCode>({
-    background: '#101827',
-    foreground: '#dbeafe',
-    lines: [],
-  })
-
-  useEffect(() => {
-    let isActive = true
-
-    highlightCodeToLines(code, language, theme).then((nextHighlight) => {
-      if (isActive) {
-        setHighlightedCode(nextHighlight)
-      }
-    })
-
-    return () => {
-      isActive = false
-    }
-  }, [code, language, theme])
-
-  const lines = code.length > 0 ? code.split('\n') : ['']
-  const hasHighlights = highlightedLines.length > 0
+  const isLight = canvasMode === 'light'
   const backgroundValue =
     background.type === 'transparent' ? 'transparent' : background.value
   const canvasStyle =
@@ -91,7 +52,7 @@ export function SnippetCanvas() {
     <section className="canvas-stage" aria-label="Live screenshot preview">
       <div className="canvas-scroll">
         <div
-          className="export-canvas"
+          className={`export-canvas export-canvas-${canvasMode}`}
           data-export-target="true"
           style={{
             ...canvasStyle,
@@ -100,61 +61,28 @@ export function SnippetCanvas() {
           }}
         >
           <article
-            className="snippet-card"
+            className={`snippet-card snippet-card-${canvasMode}`}
             style={{
-              background: highlightedCode.background,
+              background: isLight ? '#fff8ef' : '#1f1a2b',
               borderRadius,
               boxShadow: shadowMap[shadow],
-              color: highlightedCode.foreground,
+              color: isLight ? '#293445' : '#e7e8ec',
             }}
           >
             <WindowFrame />
-            <div
-              className="code-preview"
-              style={{
-                fontFamily: `"${fontFamily}", ui-monospace, SFMono-Regular, Menlo, monospace`,
-                fontSize,
-                lineHeight,
-              }}
-            >
-              {lines.map((line, index) => {
-                const lineNumber = index + 1
-                const isHighlighted = highlightedLines.includes(lineNumber)
-                const isDimmed = hasHighlights && !isHighlighted
-                const hasAnnotation =
-                  annotationsEnabled &&
-                  annotations.some((annotation) => annotation.line === lineNumber)
+            <CodeEditor variant="canvas" />
 
-                return (
-                  <div
-                    className={`code-line ${
-                      hasAnnotation ? 'has-annotation' : ''
-                    } ${isDimmed ? 'is-dimmed' : ''}`}
-                    key={`${lineNumber}-${line}`}
-                  >
-                    {showLineNumbers ? (
-                      <button
-                        aria-label={`Toggle highlight for line ${lineNumber}`}
-                        className={`line-number ${
-                          isHighlighted ? 'is-highlighted' : ''
-                        }`}
-                        type="button"
-                        onClick={() => toggleLineHighlight(lineNumber)}
-                      >
-                        {lineNumber}
-                      </button>
-                    ) : null}
-                    <code className={wordWrap ? 'wrap-code' : 'nowrap-code'}>
-                      <HighlightedLine
-                        fallback={line}
-                        tokens={highlightedCode.lines[index] ?? []}
-                      />
-                    </code>
-                    <Annotations line={lineNumber} />
+            {annotationsEnabled && annotations.length > 0 ? (
+              <aside className="annotation-stack" aria-label="AI annotations">
+                {annotations.map((annotation) => (
+                  <div className="annotation-chip" key={annotation.line}>
+                    <span>Line {annotation.line}</span>
+                    <p>{annotation.text}</p>
                   </div>
-                )
-              })}
-            </div>
+                ))}
+              </aside>
+            ) : null}
+
             {showWatermark ? (
               <span className="watermark">made with Fotosnip</span>
             ) : null}
@@ -162,35 +90,5 @@ export function SnippetCanvas() {
         </div>
       </div>
     </section>
-  )
-}
-
-function HighlightedLine({
-  fallback,
-  tokens,
-}: {
-  fallback: string
-  tokens: HighlightToken[]
-}) {
-  if (tokens.length === 0) {
-    return <>{fallback || ' '}</>
-  }
-
-  return (
-    <>
-      {tokens.map((token, index) => (
-        <span
-          key={`${index}-${token.content}`}
-          style={{
-            color: token.color,
-            fontStyle: token.fontStyle === 1 ? 'italic' : undefined,
-            fontWeight: token.fontStyle === 2 ? 700 : undefined,
-            textDecoration: token.fontStyle === 4 ? 'underline' : undefined,
-          }}
-        >
-          {token.content}
-        </span>
-      ))}
-    </>
   )
 }
