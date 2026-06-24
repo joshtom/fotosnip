@@ -1,4 +1,5 @@
 import { useEditorStore } from '../../store/editorStore'
+import { TitleIcon } from './TitleIcons'
 
 export function WindowFrame() {
   const frameStyle = useEditorStore((state) => state.frameStyle)
@@ -13,9 +14,7 @@ export function WindowFrame() {
   const titleInput = (fallback: string) => (
     <span className="window-title-field">
       {windowIcon.trim() ? (
-        <span className="window-title-icon" aria-hidden="true">
-          {windowIcon.trim().slice(0, 3)}
-        </span>
+        <TitleIcon className="window-title-icon" id={windowIcon} />
       ) : null}
       <input
         aria-label="Window title"

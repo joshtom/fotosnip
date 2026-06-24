@@ -65,10 +65,10 @@ export const themeOptions = [
 ]
 
 export const fontOptions = [
+  'Geist Mono',
   'Fira Code',
   'JetBrains Mono',
   'Cascadia Code',
-  'Geist Mono',
   'Source Code Pro',
   'IBM Plex Mono',
 ]

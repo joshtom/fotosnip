@@ -18,8 +18,11 @@ import {
   type ShadowSize,
   useEditorStore,
 } from '../../store/editorStore'
-import type { ReactNode } from 'react'
+import * as SelectPrimitive from '@radix-ui/react-select'
+import { Check, ChevronDown } from 'lucide-react'
+import { useState, type ReactNode } from 'react'
 import { AnnotationPanel } from '../AI/AnnotationPanel'
+import { TitleIcon, titleIconOptions } from '../Canvas/TitleIcons'
 import { Select } from '../ui/Select'
 import { PresetManager } from './PresetManager'
 
@@ -33,20 +36,8 @@ const fontSelectOptions = fontOptions.map((item) => ({
   label: item,
 }))
 
-const titleIconOptions = [
-  'TS',
-  'JS',
-  'JSX',
-  'GO',
-  'PY',
-  'RS',
-  '{}',
-  '<>',
-  '#',
-  '$',
-]
-
 export function Toolbar() {
+  const [settingsOpen, setSettingsOpen] = useState(true)
   const language = useEditorStore((state) => state.language)
   const frameStyle = useEditorStore((state) => state.frameStyle)
   const theme = useEditorStore((state) => state.theme)
@@ -102,13 +93,23 @@ export function Toolbar() {
   }
 
   return (
-    <details className="settings-panel" open>
-      <summary>
+    <aside className={`settings-panel ${settingsOpen ? 'is-expanded' : ''}`}>
+      <button
+        aria-controls="settings-panel-body"
+        aria-expanded={settingsOpen}
+        className="settings-summary"
+        type="button"
+        onClick={() => setSettingsOpen((isOpen) => !isOpen)}
+      >
         <span>Settings</span>
         <span aria-hidden="true">+</span>
-      </summary>
+      </button>
 
-      <aside className="settings-panel-body" aria-label="Screenshot controls">
+      <div
+        aria-label="Screenshot controls"
+        className="settings-panel-body"
+        id="settings-panel-body"
+      >
         <section className="settings-section">
           <div className="settings-section-title">Canvas</div>
           <Control label="Theme">
@@ -205,33 +206,9 @@ export function Toolbar() {
           </Control>
 
           <Control label="Title icon">
-            <div className="title-icon-picker">
-              {titleIconOptions.map((icon) => (
-                <button
-                  className={windowIcon === icon ? 'is-active' : ''}
-                  key={icon}
-                  type="button"
-                  onClick={() => setWindowIcon(icon)}
-                >
-                  {icon}
-                </button>
-              ))}
-              <button type="button" onClick={() => setWindowIcon('')}>
-                Remove
-              </button>
-            </div>
-          </Control>
-
-          <Control label="Custom icon">
-            <input
-              aria-label="Custom title icon"
-              maxLength={3}
-              placeholder="TS"
-              type="text"
+            <TitleIconSelect
               value={windowIcon}
-              onChange={(event) =>
-                setWindowIcon(event.target.value.toUpperCase())
-              }
+              onValueChange={setWindowIcon}
             />
           </Control>
         </section>
@@ -384,8 +361,87 @@ export function Toolbar() {
 
         <AnnotationPanel />
         <PresetManager />
-      </aside>
-    </details>
+      </div>
+    </aside>
+  )
+}
+
+function TitleIconSelect({
+  onValueChange,
+  value,
+}: {
+  onValueChange: (value: string) => void
+  value: string
+}) {
+  const currentIcon = titleIconOptions.find((option) => option.value === value)
+
+  return (
+    <SelectPrimitive.Root
+      value={value || 'none'}
+      onValueChange={(nextValue) =>
+        onValueChange(nextValue === 'none' ? '' : nextValue)
+      }
+    >
+      <SelectPrimitive.Trigger
+        aria-label="Title icon"
+        className="select-trigger title-icon-trigger"
+      >
+        <span className="title-icon-trigger-content">
+          {currentIcon ? (
+            <TitleIcon
+              className="title-icon-option-svg"
+              id={currentIcon.value}
+            />
+          ) : null}
+          <SelectPrimitive.Value placeholder="No icon" />
+        </span>
+        <SelectPrimitive.Icon asChild>
+          <ChevronDown aria-hidden="true" size={16} />
+        </SelectPrimitive.Icon>
+      </SelectPrimitive.Trigger>
+      <SelectPrimitive.Portal>
+        <SelectPrimitive.Content
+          className="select-content title-icon-content"
+          position="popper"
+          sideOffset={6}
+        >
+          <SelectPrimitive.Viewport className="select-viewport title-icon-viewport">
+            <TitleIconItem value="none">No icon</TitleIconItem>
+            {titleIconOptions.map((option) => (
+              <TitleIconItem key={option.value} value={option.value}>
+                <TitleIcon
+                  className="title-icon-option-svg"
+                  id={option.value}
+                />
+                <span>{option.label}</span>
+              </TitleIconItem>
+            ))}
+          </SelectPrimitive.Viewport>
+        </SelectPrimitive.Content>
+      </SelectPrimitive.Portal>
+    </SelectPrimitive.Root>
+  )
+}
+
+function TitleIconItem({
+  children,
+  value,
+}: {
+  children: ReactNode
+  value: string
+}) {
+  return (
+    <SelectPrimitive.Item
+      className="select-item title-icon-item"
+      value={value}
+    >
+      <SelectPrimitive.ItemText>
+        <span className="title-icon-item-content">{children}</span>
+      </SelectPrimitive.ItemText>
+      <SelectPrimitive.ItemIndicator className="select-indicator">
+        <Check aria-hidden="true" size={15} />
+      </SelectPrimitive.ItemIndicator>
+    </SelectPrimitive.Item>
   )
 }
 
