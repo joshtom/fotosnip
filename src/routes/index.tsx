@@ -7,9 +7,14 @@ export function IndexRoute() {
     <main className="app-shell">
       <header className="topbar">
         <div className="brand-lockup">
-          <span className="brand-mark" aria-hidden="true">
-            &lt;&gt;
-          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            className="brand-logo"
+            height="40"
+            src="/images/fotosnip.png"
+            width="40"
+          />
           <div>
             <h1>Fotosnip</h1>
             <p className="eyebrow">

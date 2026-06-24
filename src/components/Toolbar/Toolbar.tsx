@@ -406,14 +406,18 @@ function TitleIconSelect({
           sideOffset={6}
         >
           <SelectPrimitive.Viewport className="select-viewport title-icon-viewport">
-            <TitleIconItem value="none">No icon</TitleIconItem>
+            <TitleIconItem value="none">
+              <SelectPrimitive.ItemText>No icon</SelectPrimitive.ItemText>
+            </TitleIconItem>
             {titleIconOptions.map((option) => (
               <TitleIconItem key={option.value} value={option.value}>
                 <TitleIcon
                   className="title-icon-option-svg"
                   id={option.value}
                 />
-                <span>{option.label}</span>
+                <SelectPrimitive.ItemText>
+                  {option.label}
+                </SelectPrimitive.ItemText>
               </TitleIconItem>
             ))}
           </SelectPrimitive.Viewport>
@@ -435,9 +439,7 @@ function TitleIconItem({
       className="select-item title-icon-item"
       value={value}
     >
-      <SelectPrimitive.ItemText>
-        <span className="title-icon-item-content">{children}</span>
-      </SelectPrimitive.ItemText>
+      {children}
       <SelectPrimitive.ItemIndicator className="select-indicator">
         <Check aria-hidden="true" size={15} />
       </SelectPrimitive.ItemIndicator>

@@ -12,10 +12,10 @@ const paddingMap = {
 
 const shadowMap = {
   none: 'none',
-  soft: '0 18px 48px rgba(0, 0, 0, 0.28)',
-  medium: '0 30px 80px rgba(0, 0, 0, 0.36)',
-  strong: '0 42px 110px rgba(0, 0, 0, 0.46)',
-  dramatic: '0 56px 150px rgba(0, 0, 0, 0.6)',
+  soft: '0 22px 48px -26px rgba(0, 0, 0, 0.38)',
+  medium: '0 34px 82px -34px rgba(0, 0, 0, 0.48)',
+  strong: '0 48px 112px -42px rgba(0, 0, 0, 0.58)',
+  dramatic: '0 64px 150px -50px rgba(0, 0, 0, 0.68)',
 }
 
 const canvasMap = {

@@ -43,9 +43,7 @@ button:disabled {
 }
 
 .app-shell {
-  background:
-    radial-gradient(circle at 50% 0, rgba(255, 92, 138, 0.08), transparent 28rem),
-    #09090b;
+  background: #09090b;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   height: 100vh;
@@ -70,22 +68,21 @@ button:disabled {
   min-width: 0;
 }
 
-.brand-mark {
+.brand-logo {
   align-items: center;
   background:
-    linear-gradient(135deg, rgba(56, 189, 248, 0.32), rgba(255, 92, 138, 0.12)),
-    #111827;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  color: #67e8f9;
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 10px;
+  box-shadow:
+    0 10px 28px rgba(168, 85, 247, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   display: inline-flex;
-  flex: 0 0 34px;
-  font-size: 18px;
-  font-weight: 850;
-  height: 34px;
-  justify-content: center;
-  line-height: 1;
-  width: 34px;
+  flex: 0 0 40px;
+  height: 40px;
+  object-fit: cover;
+  width: 40px;
 }
 
 .topbar h1 {
@@ -123,9 +120,10 @@ button:disabled {
 }
 
 .primary-action {
-  background: rgba(255, 92, 92, 0.17);
-  border: 1px solid rgba(255, 92, 92, 0.36);
-  color: #ff6b6b;
+  background: rgba(103, 232, 249, 0.13);
+  border: 1px solid rgba(103, 232, 249, 0.26);
+  color: #a5f3fc;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .secondary-action {
@@ -137,6 +135,12 @@ button:disabled {
 .primary-action:hover,
 .secondary-action:hover {
   transform: translateY(-1px);
+}
+
+.primary-action:hover {
+  background: rgba(103, 232, 249, 0.18);
+  border-color: rgba(103, 232, 249, 0.38);
+  color: #ecfeff;
 }
 
 .primary-action:disabled,
@@ -184,15 +188,15 @@ button:disabled {
 
 .export-canvas {
   align-items: center;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   min-height: 420px;
-  min-width: min(100%, 620px);
+  min-width: 0;
   position: relative;
   transition:
     background 180ms ease,
     padding 180ms ease;
-  width: min(920px, 100%);
+  width: max-content;
 }
 
 .snippet-card {
@@ -207,13 +211,8 @@ button:disabled {
   width: min(760px, 100%);
 }
 
-.snippet-card-dark {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
 .snippet-card-light {
   border-color: rgba(15, 23, 42, 0.12);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
 .window-frame {
@@ -588,7 +587,9 @@ button:disabled {
   justify-content: space-between;
   letter-spacing: 0;
   min-height: 56px;
+  outline: none;
   padding: 0 18px;
+  -webkit-tap-highlight-color: transparent;
   transition:
     border-color 180ms ease,
     color 180ms ease;
@@ -596,6 +597,11 @@ button:disabled {
 }
 
 .settings-summary:hover {
+  color: #f4f4f5;
+}
+
+.settings-summary:focus-visible {
+  box-shadow: inset 0 0 0 1px rgba(103, 232, 249, 0.34);
   color: #f4f4f5;
 }
 
@@ -1053,7 +1059,6 @@ input {
 
   .export-canvas {
     min-height: 360px;
-    min-width: 100%;
   }
 
   .snippet-card {
@@ -1076,7 +1081,7 @@ input {
     gap: 12px;
   }
 
-  .brand-mark {
+  .brand-logo {
     flex-basis: 30px;
     height: 30px;
     width: 30px;
@@ -1088,7 +1093,6 @@ input {
   }
 
   .export-canvas {
-    padding-left: 18px !important;
-    padding-right: 18px !important;
+    max-width: none;
   }
 }
