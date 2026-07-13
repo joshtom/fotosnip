@@ -33,6 +33,7 @@ export function ExportButton() {
   async function downloadPng() {
     try {
       setBusyAction('export')
+      setFeedback({ target: 'export', message: 'Exporting' })
       const target = await getExportTarget()
       const dataUrl = await getPngDataUrl(target)
 
@@ -48,6 +49,7 @@ export function ExportButton() {
   async function copyPng() {
     try {
       setBusyAction('copy')
+      setFeedback({ target: 'copy', message: 'Copying' })
 
       const target = await getExportTarget()
       const blob = await getPngBlob(target)
@@ -93,7 +95,7 @@ export function ExportButton() {
           disabled={isExporting}
           onClick={copyPng}
         >
-          {busyAction === 'copy' ? 'Copying...' : 'Copy PNG'}
+          Copy PNG
         </button>
         {feedback?.target === 'copy' ? (
           <span className="action-feedback" role="status">
@@ -108,7 +110,7 @@ export function ExportButton() {
           disabled={isExporting}
           onClick={downloadPng}
         >
-          {busyAction === 'export' ? 'Exporting...' : 'Export PNG'}
+          Export PNG
         </button>
         {feedback?.target === 'export' ? (
           <span className="action-feedback" role="status">

@@ -9,10 +9,7 @@ export function IndexRoute() {
         <div className="workspace-identity">
           <h1>fotosnip</h1>
           <span className="topbar-divider" aria-hidden="true" />
-          <span className="draft-status">
-            <span aria-hidden="true" />
-            Local draft
-          </span>
+          <span className="product-intent">Write. Style. Export.</span>
         </div>
         <ExportButton />
       </header>

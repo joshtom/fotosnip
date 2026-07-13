@@ -91,10 +91,10 @@ export const shadowOptions: Array<{ value: ShadowSize; label: string }> = [
 
 export const canvasSizeOptions: Array<{ value: CanvasSize; label: string }> = [
   { value: 'auto', label: 'Auto' },
-  { value: 'twitter', label: 'Twitter / X' },
-  { value: 'linkedin', label: 'LinkedIn' },
-  { value: 'instagram-square', label: 'Instagram square' },
-  { value: 'instagram-story', label: 'Instagram story' },
+  { value: 'twitter', label: 'X · 1200 × 675' },
+  { value: 'linkedin', label: 'LinkedIn · 1200 × 627' },
+  { value: 'instagram-square', label: 'Instagram · 1080 × 1080' },
+  { value: 'instagram-story', label: 'Story · 1080 × 1920' },
   { value: 'custom', label: 'Custom width' },
 ]
 

@@ -20,10 +20,10 @@ const shadowMap = {
 
 const canvasMap = {
   auto: {},
-  twitter: { width: '1200px', aspectRatio: '1200 / 675' },
-  linkedin: { width: '1200px', aspectRatio: '1200 / 627' },
-  'instagram-square': { width: '1080px', aspectRatio: '1 / 1' },
-  'instagram-story': { width: '1080px', aspectRatio: '1080 / 1920' },
+  twitter: { width: '1200px', height: '675px' },
+  linkedin: { width: '1200px', height: '627px' },
+  'instagram-square': { width: '1080px', height: '1080px' },
+  'instagram-story': { width: '1080px', height: '1920px' },
   custom: {},
 }
 

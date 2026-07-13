@@ -104,22 +104,12 @@ button:disabled {
   width: 1px;
 }
 
-.draft-status {
-  align-items: center;
+.product-intent {
   color: var(--color-text-muted);
   display: inline-flex;
   font-size: 12px;
   font-weight: 600;
-  gap: 7px;
   white-space: nowrap;
-}
-
-.draft-status > span {
-  background: #34c759;
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.12);
-  height: 6px;
-  width: 6px;
 }
 
 .primary-action,
@@ -264,14 +254,15 @@ button:disabled {
 
 .snippet-card {
   border: 1px solid rgba(255, 255, 255, 0.13);
-  min-width: min(100%, 620px);
+  flex: 0 0 auto;
+  min-width: 560px;
   overflow: hidden;
   position: relative;
   transition:
     background 180ms ease,
     border-color 180ms ease,
     color 180ms ease;
-  width: min(760px, 100%);
+  width: clamp(560px, 58vw, 760px);
 }
 
 .snippet-card-light {
@@ -1142,10 +1133,6 @@ input {
     min-height: 360px;
   }
 
-  .snippet-card {
-    min-width: min(100%, 360px);
-  }
-
   .settings-panel {
     right: 12px;
     top: 70px;
@@ -1162,7 +1149,7 @@ input {
     gap: 12px;
   }
 
-  .draft-status,
+  .product-intent,
   .topbar-divider {
     display: none;
   }

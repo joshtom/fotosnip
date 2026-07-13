@@ -9,6 +9,7 @@ import {
   Decoration,
   EditorView,
   highlightActiveLineGutter,
+  keymap,
   lineNumbers,
 } from '@codemirror/view'
 import { tags } from '@lezer/highlight'
@@ -81,6 +82,8 @@ export function CodeEditor({ variant = 'panel' }: CodeEditorProps) {
     }
 
     const extensions: Extension[] = [
+      history(),
+      keymap.of([...defaultKeymap, ...historyKeymap]),
       EditorView.updateListener.of((update) => {
         if (update.docChanged) {
           setCode(update.state.doc.toString())
@@ -283,3 +286,4 @@ function getEditorTheme({
     },
   }
 }
+import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
