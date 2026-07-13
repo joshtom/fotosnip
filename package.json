@@ -11,11 +11,10 @@
     "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {
-    "@codemirror/lang-javascript": "^6.2.5",
     "@codemirror/language": "^6.12.3",
+    "@codemirror/language-data": "^6.5.2",
     "@codemirror/state": "latest",
     "@codemirror/view": "latest",
-    "@google/genai": "latest",
     "@lezer/highlight": "^1.2.3",
     "@radix-ui/react-select": "^2.3.1",
     "@tanstack/react-router": "latest",

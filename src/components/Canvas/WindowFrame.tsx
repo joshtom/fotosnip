@@ -53,9 +53,9 @@ export function WindowFrame() {
     case 'linux-gnome':
       return (
         <div className="window-frame frame-gnome">
-          <span className="gnome-close" aria-hidden="true" />
-          {titleInput('utils.ts')}
           <span className="gnome-menu" aria-hidden="true" />
+          {titleInput('utils.ts')}
+          <span className="gnome-close" aria-hidden="true" />
         </div>
       )
     case 'linux-kde':
@@ -63,9 +63,9 @@ export function WindowFrame() {
         <div className="window-frame frame-kde">
           {titleInput('utils.ts')}
           <span className="window-controls controls-kde" aria-hidden="true">
-            <span className="control-icon kde-close" />
             <span className="control-icon minimize" />
             <span className="control-icon maximize" />
+            <span className="control-icon kde-close" />
           </span>
         </div>
       )

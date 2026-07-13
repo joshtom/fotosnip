@@ -33,10 +33,6 @@ export function SnippetCanvas() {
   const shadow = useEditorStore((state) => state.shadow)
   const background = useEditorStore((state) => state.background)
   const showWatermark = useEditorStore((state) => state.showWatermark)
-  const annotationsEnabled = useEditorStore(
-    (state) => state.annotationsEnabled,
-  )
-  const annotations = useEditorStore((state) => state.annotations)
   const canvasMode = useEditorStore((state) => state.canvasMode)
   const canvasSize = useEditorStore((state) => state.canvasSize)
   const customWidth = useEditorStore((state) => state.customWidth)
@@ -71,17 +67,6 @@ export function SnippetCanvas() {
           >
             <WindowFrame />
             <CodeEditor variant="canvas" />
-
-            {annotationsEnabled && annotations.length > 0 ? (
-              <aside className="annotation-stack" aria-label="AI annotations">
-                {annotations.map((annotation) => (
-                  <div className="annotation-chip" key={annotation.line}>
-                    <span>Line {annotation.line}</span>
-                    <p>{annotation.text}</p>
-                  </div>
-                ))}
-              </aside>
-            ) : null}
 
             {showWatermark ? (
               <span className="watermark">made with Fotosnip</span>

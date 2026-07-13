@@ -21,7 +21,6 @@ import {
 import * as SelectPrimitive from '@radix-ui/react-select'
 import { Check, ChevronDown } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
-import { AnnotationPanel } from '../AI/AnnotationPanel'
 import { TitleIcon, titleIconOptions } from '../Canvas/TitleIcons'
 import { Select } from '../ui/Select'
 import { PresetManager } from './PresetManager'
@@ -55,9 +54,6 @@ export function Toolbar() {
   const wordWrap = useEditorStore((state) => state.wordWrap)
   const highlightedLines = useEditorStore((state) => state.highlightedLines)
   const showWatermark = useEditorStore((state) => state.showWatermark)
-  const annotationsEnabled = useEditorStore(
-    (state) => state.annotationsEnabled,
-  )
   const windowIcon = useEditorStore((state) => state.windowIcon)
   const setLanguage = useEditorStore((state) => state.setLanguage)
   const setFrameStyle = useEditorStore((state) => state.setFrameStyle)
@@ -78,9 +74,6 @@ export function Toolbar() {
   const setWordWrap = useEditorStore((state) => state.setWordWrap)
   const clearHighlights = useEditorStore((state) => state.clearHighlights)
   const setShowWatermark = useEditorStore((state) => state.setShowWatermark)
-  const setAnnotationsEnabled = useEditorStore(
-    (state) => state.setAnnotationsEnabled,
-  )
   const setWindowIcon = useEditorStore((state) => state.setWindowIcon)
 
   function applyCanvasMode(nextMode: CanvasMode) {
@@ -331,16 +324,6 @@ export function Toolbar() {
             </label>
             <label>
               <input
-                checked={annotationsEnabled}
-                type="checkbox"
-                onChange={(event) =>
-                  setAnnotationsEnabled(event.target.checked)
-                }
-              />
-              AI annotate
-            </label>
-            <label>
-              <input
                 checked={showWatermark}
                 type="checkbox"
                 onChange={(event) => setShowWatermark(event.target.checked)}
@@ -359,7 +342,6 @@ export function Toolbar() {
           ) : null}
         </section>
 
-        <AnnotationPanel />
         <PresetManager />
       </div>
     </aside>

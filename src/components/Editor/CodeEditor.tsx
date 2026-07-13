@@ -1,5 +1,9 @@
-import { javascript } from '@codemirror/lang-javascript'
-import { HighlightStyle, syntaxHighlighting } from '@codemirror/language'
+import {
+  HighlightStyle,
+  LanguageDescription,
+  syntaxHighlighting,
+} from '@codemirror/language'
+import { languages } from '@codemirror/language-data'
 import { RangeSetBuilder, type Extension } from '@codemirror/state'
 import {
   Decoration,
@@ -8,7 +12,7 @@ import {
   lineNumbers,
 } from '@codemirror/view'
 import { tags } from '@lezer/highlight'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useEditorStore } from '../../store/editorStore'
 
@@ -23,6 +27,7 @@ const lineHighlightDecoration = Decoration.line({
 export function CodeEditor({ variant = 'panel' }: CodeEditorProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const viewRef = useRef<EditorView | null>(null)
+  const [languageExtension, setLanguageExtension] = useState<Extension>([])
   const code = useEditorStore((state) => state.code)
   const language = useEditorStore((state) => state.language)
   const fontFamily = useEditorStore((state) => state.fontFamily)
@@ -38,6 +43,39 @@ export function CodeEditor({ variant = 'panel' }: CodeEditorProps) {
   )
 
   useEffect(() => {
+    let isCurrent = true
+    const description = LanguageDescription.matchLanguageName(
+      languages,
+      getLanguageName(language),
+      true,
+    )
+
+    if (!description) {
+      setLanguageExtension([])
+      return () => {
+        isCurrent = false
+      }
+    }
+
+    void description
+      .load()
+      .then((support) => {
+        if (isCurrent) {
+          setLanguageExtension(support)
+        }
+      })
+      .catch(() => {
+        if (isCurrent) {
+          setLanguageExtension([])
+        }
+      })
+
+    return () => {
+      isCurrent = false
+    }
+  }, [language])
+
+  useEffect(() => {
     if (!containerRef.current) {
       return
     }
@@ -48,7 +86,7 @@ export function CodeEditor({ variant = 'panel' }: CodeEditorProps) {
           setCode(update.state.doc.toString())
         }
       }),
-      getLanguageExtension(language),
+      languageExtension,
       syntaxHighlighting(getHighlightStyle(canvasMode)),
       lineHighlightExtension(highlightedLines),
       EditorView.theme(
@@ -97,7 +135,7 @@ export function CodeEditor({ variant = 'panel' }: CodeEditorProps) {
     fontFamily,
     fontSize,
     highlightedLines,
-    language,
+    languageExtension,
     lineHeight,
     setCode,
     showLineNumbers,
@@ -131,20 +169,14 @@ export function CodeEditor({ variant = 'panel' }: CodeEditorProps) {
   )
 }
 
-function getLanguageExtension(language: string): Extension {
-  if (
-    language === 'typescript' ||
-    language === 'tsx' ||
-    language === 'javascript' ||
-    language === 'jsx'
-  ) {
-    return javascript({
-      jsx: language === 'jsx' || language === 'tsx',
-      typescript: language === 'typescript' || language === 'tsx',
-    })
+function getLanguageName(language: string) {
+  const aliases: Record<string, string> = {
+    csharp: 'C#',
+    jsx: 'JSX',
+    tsx: 'TSX',
   }
 
-  return []
+  return aliases[language] ?? language
 }
 
 function lineHighlightExtension(highlightedLines: number[]): Extension {

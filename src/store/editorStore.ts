@@ -16,7 +16,6 @@ export type Background =
   | { type: 'gradient'; value: string }
   | { type: 'transparent'; value: 'transparent' }
 
-export type AnnotationMode = 'explain' | 'teach' | 'review'
 export type CanvasMode = 'dark' | 'light'
 export type CanvasSize =
   | 'auto'
@@ -25,11 +24,6 @@ export type CanvasSize =
   | 'instagram-square'
   | 'instagram-story'
   | 'custom'
-
-export type Annotation = {
-  line: number
-  text: string
-}
 
 export type EditorSettings = {
   code: string
@@ -49,11 +43,6 @@ export type EditorSettings = {
   wordWrap: boolean
   highlightedLines: number[]
   showWatermark: boolean
-  annotationsEnabled: boolean
-  annotationMode: AnnotationMode
-  annotations: Annotation[]
-  annotationsLoading: boolean
-  annotationsError: string
   canvasMode: CanvasMode
   canvasSize: CanvasSize
   customWidth: number
@@ -84,13 +73,6 @@ type EditorActions = {
   toggleLineHighlight: (line: number) => void
   clearHighlights: () => void
   setShowWatermark: (showWatermark: boolean) => void
-  setAnnotationsEnabled: (annotationsEnabled: boolean) => void
-  setAnnotationMode: (annotationMode: AnnotationMode) => void
-  setAnnotations: (annotations: Annotation[]) => void
-  updateAnnotation: (line: number, text: string) => void
-  deleteAnnotation: (line: number) => void
-  setAnnotationsLoading: (annotationsLoading: boolean) => void
-  setAnnotationsError: (annotationsError: string) => void
   setCanvasMode: (canvasMode: CanvasMode) => void
   setCanvasSize: (canvasSize: CanvasSize) => void
   setCustomWidth: (customWidth: number) => void
@@ -198,11 +180,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   wordWrap: true,
   highlightedLines: [],
   showWatermark: false,
-  annotationsEnabled: false,
-  annotationMode: 'explain',
-  annotations: [],
-  annotationsLoading: false,
-  annotationsError: '',
   canvasMode: 'dark',
   canvasSize: 'auto',
   customWidth: 1200,
@@ -230,23 +207,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     })),
   clearHighlights: () => set({ highlightedLines: [] }),
   setShowWatermark: (showWatermark) => set({ showWatermark }),
-  setAnnotationsEnabled: (annotationsEnabled) => set({ annotationsEnabled }),
-  setAnnotationMode: (annotationMode) => set({ annotationMode }),
-  setAnnotations: (annotations) => set({ annotations }),
-  updateAnnotation: (line, text) =>
-    set((state) => ({
-      annotations: state.annotations.map((annotation) =>
-        annotation.line === line ? { ...annotation, text } : annotation,
-      ),
-    })),
-  deleteAnnotation: (line) =>
-    set((state) => ({
-      annotations: state.annotations.filter(
-        (annotation) => annotation.line !== line,
-      ),
-    })),
-  setAnnotationsLoading: (annotationsLoading) => set({ annotationsLoading }),
-  setAnnotationsError: (annotationsError) => set({ annotationsError }),
   setCanvasMode: (canvasMode) => set({ canvasMode }),
   setCanvasSize: (canvasSize) => set({ canvasSize }),
   setCustomWidth: (customWidth) => set({ customWidth }),

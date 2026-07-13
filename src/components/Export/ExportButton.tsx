@@ -1,16 +1,22 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toBlob, toPng } from 'html-to-image'
 
-type ExportStatus =
-  | 'idle'
-  | 'exporting'
-  | 'copied'
-  | 'downloaded'
-  | 'downloadedFallback'
-  | 'error'
+type ActionTarget = 'export' | 'copy'
+type Feedback = { target: ActionTarget; message: string } | null
 
 export function ExportButton() {
-  const [status, setStatus] = useState<ExportStatus>('idle')
+  const [busyAction, setBusyAction] = useState<ActionTarget | null>(null)
+  const [feedback, setFeedback] = useState<Feedback>(null)
+
+  useEffect(() => {
+    if (!feedback) {
+      return
+    }
+
+    const timer = window.setTimeout(() => setFeedback(null), 1600)
+
+    return () => window.clearTimeout(timer)
+  }, [feedback])
 
   async function getExportTarget() {
     const target = document.querySelector<HTMLElement>('[data-export-target]')
@@ -26,21 +32,22 @@ export function ExportButton() {
 
   async function downloadPng() {
     try {
-      setStatus('exporting')
+      setBusyAction('export')
       const target = await getExportTarget()
       const dataUrl = await getPngDataUrl(target)
 
       downloadDataUrl(dataUrl)
-
-      setStatus('downloaded')
+      setFeedback({ target: 'export', message: 'Exported' })
     } catch {
-      setStatus('error')
+      setFeedback({ target: 'export', message: 'Export failed' })
+    } finally {
+      setBusyAction(null)
     }
   }
 
   async function copyPng() {
     try {
-      setStatus('exporting')
+      setBusyAction('copy')
 
       const target = await getExportTarget()
       const blob = await getPngBlob(target)
@@ -49,7 +56,7 @@ export function ExportButton() {
         const dataUrl = await getPngDataUrl(target)
 
         downloadDataUrl(dataUrl)
-        setStatus('downloadedFallback')
+        setFeedback({ target: 'copy', message: 'Downloaded instead' })
         return
       }
 
@@ -59,45 +66,55 @@ export function ExportButton() {
         }),
       ])
 
-      setStatus('copied')
+      setFeedback({ target: 'copy', message: 'Copied' })
     } catch {
       try {
         const target = await getExportTarget()
         const dataUrl = await getPngDataUrl(target)
 
         downloadDataUrl(dataUrl)
-        setStatus('downloadedFallback')
+        setFeedback({ target: 'copy', message: 'Downloaded instead' })
       } catch {
-        setStatus('error')
+        setFeedback({ target: 'copy', message: 'Copy failed' })
       }
+    } finally {
+      setBusyAction(null)
     }
   }
 
-  const isExporting = status === 'exporting'
+  const isExporting = busyAction !== null
 
   return (
     <div className="export-actions">
-      <button
-        className="primary-action"
-        type="button"
-        disabled={isExporting}
-        onClick={downloadPng}
-      >
-        {isExporting ? 'Exporting...' : 'Export PNG'}
-      </button>
-      <button
-        className="secondary-action"
-        type="button"
-        disabled={isExporting}
-        onClick={copyPng}
-      >
-        Copy PNG
-      </button>
-      <span className="export-status" role="status">
-        {status === 'copied' ? 'Copied' : null}
-        {status === 'downloaded' ? 'Downloaded' : null}
-        {status === 'downloadedFallback' ? 'Downloaded instead' : null}
-        {status === 'error' ? 'Export failed' : null}
+      <span className="export-action-wrap">
+        <button
+          className="secondary-action"
+          type="button"
+          disabled={isExporting}
+          onClick={copyPng}
+        >
+          {busyAction === 'copy' ? 'Copying...' : 'Copy PNG'}
+        </button>
+        {feedback?.target === 'copy' ? (
+          <span className="action-feedback" role="status">
+            {feedback.message}
+          </span>
+        ) : null}
+      </span>
+      <span className="export-action-wrap">
+        <button
+          className="primary-action"
+          type="button"
+          disabled={isExporting}
+          onClick={downloadPng}
+        >
+          {busyAction === 'export' ? 'Exporting...' : 'Export PNG'}
+        </button>
+        {feedback?.target === 'export' ? (
+          <span className="action-feedback" role="status">
+            {feedback.message}
+          </span>
+        ) : null}
       </span>
     </div>
   )

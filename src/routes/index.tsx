@@ -6,21 +6,13 @@ export function IndexRoute() {
   return (
     <main className="app-shell">
       <header className="topbar">
-        <div className="brand-lockup">
-          <img
-            alt=""
-            aria-hidden="true"
-            className="brand-logo"
-            height="40"
-            src="/images/fotosnip.png"
-            width="40"
-          />
-          <div>
-            <h1>Fotosnip</h1>
-            <p className="eyebrow">
-              The code screenshot tool built for every developer.
-            </p>
-          </div>
+        <div className="workspace-identity">
+          <h1>fotosnip</h1>
+          <span className="topbar-divider" aria-hidden="true" />
+          <span className="draft-status">
+            <span aria-hidden="true" />
+            Local draft
+          </span>
         </div>
         <ExportButton />
       </header>
