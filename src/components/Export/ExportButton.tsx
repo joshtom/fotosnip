@@ -95,7 +95,8 @@ export function ExportButton() {
           disabled={isExporting}
           onClick={copyPng}
         >
-          Copy PNG
+          <span className="action-label-desktop">Copy PNG</span>
+          <span className="action-label-mobile">Copy</span>
         </button>
         {feedback?.target === 'copy' ? (
           <span className="action-feedback" role="status">
@@ -110,7 +111,8 @@ export function ExportButton() {
           disabled={isExporting}
           onClick={downloadPng}
         >
-          Export PNG
+          <span className="action-label-desktop">Export PNG</span>
+          <span className="action-label-mobile">Export</span>
         </button>
         {feedback?.target === 'export' ? (
           <span className="action-feedback" role="status">

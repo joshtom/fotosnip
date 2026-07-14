@@ -47,6 +47,7 @@ body,
 body {
   margin: 0;
   min-width: 320px;
+  overscroll-behavior: none;
 }
 
 button,
@@ -179,6 +180,10 @@ button:disabled {
 .export-action-wrap {
   display: inline-flex;
   position: relative;
+}
+
+.action-label-mobile {
+  display: none;
 }
 
 .action-feedback {
@@ -637,6 +642,10 @@ button:disabled {
   top: 74px;
   width: min(360px, calc(100vw - 32px));
   z-index: 20;
+}
+
+.settings-backdrop {
+  display: none;
 }
 
 .settings-summary {
@@ -1119,53 +1128,144 @@ input {
 }
 
 @media (max-width: 900px) {
+  .app-shell {
+    height: 100dvh;
+  }
+
   .topbar {
-    padding: 12px 14px;
+    gap: 10px;
+    min-height: 56px;
+    padding: 8px 12px 8px 14px;
   }
 
   .topbar h1 {
-    font-size: 16px;
+    font-size: 15px;
   }
 
-  .secondary-action {
+  .product-intent,
+  .topbar-divider,
+  .action-label-desktop {
     display: none;
   }
 
+  .action-label-mobile {
+    display: inline;
+  }
+
+  .primary-action,
+  .secondary-action {
+    min-height: 40px;
+    padding: 0 12px;
+  }
+
+  .export-actions {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
   .canvas-scroll {
-    padding: 24px 12px;
+    align-items: center;
+    justify-content: flex-start;
+    overscroll-behavior: contain;
+    padding: 16px 12px 88px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .canvas-scroll::-webkit-scrollbar {
+    display: none;
   }
 
   .export-canvas {
     min-height: 360px;
   }
 
+  .canvas-size-auto .snippet-card {
+    min-width: 0;
+    width: calc(100vw - 48px);
+  }
+
+  .settings-backdrop {
+    background: rgba(0, 0, 0, 0.48);
+    border: 0;
+    display: block;
+    inset: 56px 0 0;
+    padding: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 19;
+  }
+
   .settings-panel {
-    right: 12px;
-    top: 70px;
-    width: min(340px, calc(100vw - 24px));
+    backdrop-filter: blur(28px);
+    border-radius: 16px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    left: 10px;
+    max-height: calc(100dvh - 76px);
+    right: 10px;
+    top: auto;
+    width: auto;
+  }
+
+  .settings-summary {
+    min-height: 52px;
+    padding: 0 16px;
   }
 
   .settings-panel.is-expanded .settings-panel-body {
-    max-height: calc(100vh - 164px);
+    max-height: calc(100dvh - 148px);
+    overscroll-behavior: contain;
+    padding: 16px 16px calc(18px + env(safe-area-inset-bottom));
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .select-trigger,
+  input,
+  .segmented-control {
+    min-height: 44px;
+  }
+
+  .segmented-control button {
+    min-height: 36px;
+  }
+
+  .toggle-list label {
+    min-height: 36px;
+  }
+
+  input[type='range'] {
+    min-height: 28px;
   }
 }
 
 @media (max-width: 560px) {
-  .topbar {
-    gap: 12px;
-  }
-
-  .product-intent,
-  .topbar-divider {
-    display: none;
-  }
-
-  .primary-action {
-    min-height: 36px;
-    padding: 0 11px;
-  }
-
   .export-canvas {
     max-width: none;
+  }
+
+  .window-frame {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .frame-windows {
+    padding-left: 10px;
+  }
+
+  .controls-windows .control-icon {
+    width: 38px;
+  }
+
+  .code-editor-canvas .cm-content {
+    padding-bottom: 24px;
+    padding-top: 20px;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .settings-panel {
+    left: auto;
+    width: min(360px, calc(100vw - 20px));
   }
 }

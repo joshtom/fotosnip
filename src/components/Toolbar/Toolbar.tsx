@@ -20,7 +20,7 @@ import {
 } from '../../store/editorStore'
 import * as SelectPrimitive from '@radix-ui/react-select'
 import { Check, ChevronDown } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { Fragment, useState, type ReactNode } from 'react'
 import { TitleIcon, titleIconOptions } from '../Canvas/TitleIcons'
 import { Select } from '../ui/Select'
 import { PresetManager } from './PresetManager'
@@ -36,7 +36,13 @@ const fontSelectOptions = fontOptions.map((item) => ({
 }))
 
 export function Toolbar() {
-  const [settingsOpen, setSettingsOpen] = useState(true)
+  const [settingsOpen, setSettingsOpen] = useState(() => {
+    if (typeof window === 'undefined') {
+      return true
+    }
+
+    return !window.matchMedia('(max-width: 900px)').matches
+  })
   const language = useEditorStore((state) => state.language)
   const frameStyle = useEditorStore((state) => state.frameStyle)
   const theme = useEditorStore((state) => state.theme)
@@ -86,7 +92,16 @@ export function Toolbar() {
   }
 
   return (
-    <aside className={`settings-panel ${settingsOpen ? 'is-expanded' : ''}`}>
+    <Fragment>
+      {settingsOpen ? (
+        <button
+          aria-label="Close settings"
+          className="settings-backdrop"
+          type="button"
+          onClick={() => setSettingsOpen(false)}
+        />
+      ) : null}
+      <aside className={`settings-panel ${settingsOpen ? 'is-expanded' : ''}`}>
       <button
         aria-controls="settings-panel-body"
         aria-expanded={settingsOpen}
@@ -99,9 +114,11 @@ export function Toolbar() {
       </button>
 
       <div
+        aria-hidden={!settingsOpen}
         aria-label="Screenshot controls"
         className="settings-panel-body"
         id="settings-panel-body"
+        inert={!settingsOpen}
       >
         <section className="settings-section">
           <div className="settings-section-title">Canvas</div>
@@ -344,7 +361,8 @@ export function Toolbar() {
 
         <PresetManager />
       </div>
-    </aside>
+      </aside>
+    </Fragment>
   )
 }
 

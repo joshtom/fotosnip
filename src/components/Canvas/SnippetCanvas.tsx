@@ -48,7 +48,7 @@ export function SnippetCanvas() {
     <section className="canvas-stage" aria-label="Live screenshot preview">
       <div className="canvas-scroll">
         <div
-          className={`export-canvas export-canvas-${canvasMode}`}
+          className={`export-canvas export-canvas-${canvasMode} canvas-size-${canvasSize}`}
           data-export-target="true"
           style={{
             ...canvasStyle,
