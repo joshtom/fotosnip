@@ -246,11 +246,11 @@ function getEditorTheme({
       fontFamily: `"${fontFamily}", ui-monospace, SFMono-Regular, Menlo, monospace`,
       fontSize: `${fontSize}px`,
       lineHeight: `${lineHeight}`,
-      minHeight: isCanvas ? 'clamp(220px, 30vh, 420px)' : '220px',
+      minHeight: isCanvas ? 'auto' : '220px',
     },
     '.cm-content': {
       caretColor: dark ? '#6ee7f9' : '#0284c7',
-      padding: isCanvas ? '24px 26px 30px 0' : '12px 0',
+      padding: isCanvas ? '24px 26px 24px 0' : '12px 0',
     },
     '.cm-focused': {
       outline: 'none',
