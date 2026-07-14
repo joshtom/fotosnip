@@ -1256,11 +1256,6 @@ input {
   .controls-windows .control-icon {
     width: 38px;
   }
-
-  .code-editor-canvas .cm-content {
-    padding-bottom: 24px;
-    padding-top: 20px;
-  }
 }
 
 @media (max-width: 900px) and (orientation: landscape) {
