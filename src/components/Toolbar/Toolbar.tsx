@@ -135,6 +135,7 @@ export function Toolbar() {
             <div className="segmented-control" aria-label="Canvas mode">
               <button
                 aria-label="Dark canvas"
+                aria-pressed={canvasMode === 'dark'}
                 className={canvasMode === 'dark' ? 'is-active' : ''}
                 type="button"
                 onClick={() => applyCanvasMode('dark')}
@@ -143,6 +144,7 @@ export function Toolbar() {
               </button>
               <button
                 aria-label="Light canvas"
+                aria-pressed={canvasMode === 'light'}
                 className={canvasMode === 'light' ? 'is-active' : ''}
                 type="button"
                 onClick={() => applyCanvasMode('light')}
@@ -266,9 +268,14 @@ export function Toolbar() {
         <section className="settings-section">
           <div className="settings-section-title">Layout</div>
           <Control label="Padding">
-            <div className="segmented-control padding-segments">
+            <div
+              aria-label="Canvas padding"
+              className="segmented-control padding-segments"
+              role="group"
+            >
               {paddingOptions.map((option) => (
                 <button
+                  aria-pressed={padding === option.value}
                   className={padding === option.value ? 'is-active' : ''}
                   key={option.value}
                   type="button"

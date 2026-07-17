@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+
 import { CodeEditor } from '../Editor/CodeEditor'
 import { WindowFrame } from './WindowFrame'
 import { useEditorStore } from '../../store/editorStore'
@@ -28,6 +30,7 @@ const canvasMap = {
 }
 
 export function SnippetCanvas() {
+  const scrollRef = useRef<HTMLDivElement | null>(null)
   const padding = useEditorStore((state) => state.padding)
   const borderRadius = useEditorStore((state) => state.borderRadius)
   const shadow = useEditorStore((state) => state.shadow)
@@ -44,9 +47,47 @@ export function SnippetCanvas() {
       ? { width: `${customWidth}px` }
       : canvasMap[canvasSize]
 
+  useEffect(() => {
+    const scrollContainer = scrollRef.current
+
+    if (!scrollContainer) {
+      return
+    }
+
+    const focusCanvas = () => {
+      const snippetCard =
+        scrollContainer.querySelector<HTMLElement>('.snippet-card')
+
+      if (!snippetCard) {
+        return
+      }
+
+      const scrollBounds = scrollContainer.getBoundingClientRect()
+      const cardBounds = snippetCard.getBoundingClientRect()
+      const scrollPadding = Number.parseFloat(
+        window.getComputedStyle(scrollContainer).paddingLeft,
+      )
+      const cardStart =
+        cardBounds.left -
+        scrollBounds.left +
+        scrollContainer.scrollLeft -
+        scrollPadding
+
+      scrollContainer.scrollLeft = Math.max(0, cardStart)
+    }
+    const frame = window.requestAnimationFrame(focusCanvas)
+
+    window.addEventListener('resize', focusCanvas)
+
+    return () => {
+      window.cancelAnimationFrame(frame)
+      window.removeEventListener('resize', focusCanvas)
+    }
+  }, [canvasSize, customWidth])
+
   return (
     <section className="canvas-stage" aria-label="Live screenshot preview">
-      <div className="canvas-scroll">
+      <div className="canvas-scroll" ref={scrollRef}>
         <div
           className={`export-canvas export-canvas-${canvasMode} canvas-size-${canvasSize}`}
           data-export-target="true"
