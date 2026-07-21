@@ -88,31 +88,33 @@ export function SnippetCanvas() {
   return (
     <section className="canvas-stage" aria-label="Live screenshot preview">
       <div className="canvas-scroll" ref={scrollRef}>
-        <div
-          className={`export-canvas export-canvas-${canvasMode} canvas-size-${canvasSize}`}
-          data-export-target="true"
-          style={{
-            ...canvasStyle,
-            background: backgroundValue,
-            padding: paddingMap[padding],
-          }}
-        >
-          <article
-            className={`snippet-card snippet-card-${canvasMode}`}
+        <div className="canvas-positioner">
+          <div
+            className={`export-canvas export-canvas-${canvasMode} canvas-size-${canvasSize}`}
+            data-export-target="true"
             style={{
-              background: isLight ? '#fff8ef' : '#1f1a2b',
-              borderRadius,
-              boxShadow: shadowMap[shadow],
-              color: isLight ? '#293445' : '#e7e8ec',
+              ...canvasStyle,
+              background: backgroundValue,
+              padding: paddingMap[padding],
             }}
           >
-            <WindowFrame />
-            <CodeEditor variant="canvas" />
+            <article
+              className={`snippet-card snippet-card-${canvasMode}`}
+              style={{
+                background: isLight ? '#fff8ef' : '#1f1a2b',
+                borderRadius,
+                boxShadow: shadowMap[shadow],
+                color: isLight ? '#293445' : '#e7e8ec',
+              }}
+            >
+              <WindowFrame />
+              <CodeEditor variant="canvas" />
 
-            {showWatermark ? (
-              <span className="watermark">made with Fotosnip</span>
-            ) : null}
-          </article>
+              {showWatermark ? (
+                <span className="watermark">made with Fotosnip</span>
+              ) : null}
+            </article>
+          </div>
         </div>
       </div>
     </section>
