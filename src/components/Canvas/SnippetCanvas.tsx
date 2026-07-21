@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import { CodeEditor } from '../Editor/CodeEditor'
 import { WindowFrame } from './WindowFrame'
+import { useCodeTheme } from '../../hooks/useCodeTheme'
 import { useEditorStore } from '../../store/editorStore'
 
 const paddingMap = {
@@ -36,10 +37,12 @@ export function SnippetCanvas() {
   const shadow = useEditorStore((state) => state.shadow)
   const background = useEditorStore((state) => state.background)
   const showWatermark = useEditorStore((state) => state.showWatermark)
+  const theme = useEditorStore((state) => state.theme)
   const canvasMode = useEditorStore((state) => state.canvasMode)
   const canvasSize = useEditorStore((state) => state.canvasSize)
   const customWidth = useEditorStore((state) => state.customWidth)
   const isLight = canvasMode === 'light'
+  const codeTheme = useCodeTheme(theme, isLight)
   const backgroundValue =
     background.type === 'transparent' ? 'transparent' : background.value
   const canvasStyle =
@@ -101,10 +104,10 @@ export function SnippetCanvas() {
             <article
               className={`snippet-card snippet-card-${canvasMode}`}
               style={{
-                background: isLight ? '#fff8ef' : '#1f1a2b',
+                background: codeTheme.background,
                 borderRadius,
                 boxShadow: shadowMap[shadow],
-                color: isLight ? '#293445' : '#e7e8ec',
+                color: codeTheme.foreground,
               }}
             >
               <WindowFrame />
